@@ -1,0 +1,14 @@
+;----------------------------------
+;BOXCTRL.DEF module definition file
+;----------------------------------
+
+LIBRARY      BOXCTRL
+DESCRIPTION  'Box Control'
+EXETYPE      WINDOWS
+CODE         PRELOAD MOVEABLE DISCARDABLE
+DATA         PRELOAD MOVEABLE SINGLE
+
+HEAPSIZE     1024                         ; initial heap size
+
+EXPORTS      WEP         @1 RESIDENTNAME  ; keep this resident always
+             BOXCTRLINIT @2

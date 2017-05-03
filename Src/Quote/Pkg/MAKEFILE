@@ -1,0 +1,30 @@
+##############################################################################
+## Packaging Makefile
+##
+## This computer program is Copyright (c) Ward Quinlan, 1996 - 2001
+##############################################################################
+
+install:
+    -copy $(DEVELOPMENT)\BIN\QUOTE.EXE   $(DEVELOPMENT)\PKG
+    -copy $(DEVELOPMENT)\BIN\QT_UPD.EXE  $(DEVELOPMENT)\PKG
+    -copy $(DEVELOPMENT)\BIN\SLNK.EXE    $(DEVELOPMENT)\PKG
+    -copy $(DEVELOPMENT)\BIN\CCI.IND     $(DEVELOPMENT)\PKG
+    -copy $(DEVELOPMENT)\BIN\DMI.IND     $(DEVELOPMENT)\PKG
+    -copy $(DEVELOPMENT)\BIN\BOXCTRL.DLL $(DEVELOPMENT)\PKG
+    -copy $(DEVELOPMENT)\BIN\STATPAK.DLL $(DEVELOPMENT)\PKG
+    cd $(DEVELOPMENT)\PKG
+    pkzip -sqt+171 QUOTE.ZIP QUOTE.EXE QT_UPD.EXE SLNK.EXE *.IND BOXCTRL.DLL STATPAK.DLL
+    cd $(DEVELOPMENT)\SRC\QUOTE\PKG
+    
+clean:
+
+clninst:
+    -erase $(DEVELOPMENT)\PKG\QUOTE.ZIP
+    -erase $(DEVELOPMENT)\PKG\QUOTE.EXE
+    -erase $(DEVELOPMENT)\PKG\QT_UPD.EXE
+    -erase $(DEVELOPMENT)\PKG\SLNK.EXE
+    -erase $(DEVELOPMENT)\PKG\*.IND
+    -erase $(DEVELOPMENT)\PKG\STATPAK.DLL
+    -erase $(DEVELOPMENT)\PKG\BOXCTRL.DLL
+
+

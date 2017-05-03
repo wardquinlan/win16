@@ -1,0 +1,1568 @@
+BUGS                           
+====
+
+1.  view.cpp ASSERTs at line 1799, QView::end( ), if
+    you open a view with an empty document.  No
+    GP fault occurs.  The fix is to probably
+    return from QView::end( ) instead of ASSERTing
+    if the condition is true.
+
+
+
+                           Quote TestPlan
+                           ==============
+                             
+                             August 1996
+                           
+
+                            
+Category A - UI Tests
+---------------------
+
+A.1 - Edit Box Testing
+
+    Test the following edit boxes:
+
+        - Add Quote Dialog
+    
+            - Date Edit box (256 chars)
+            - Hi   Edit box (256 chars)
+            - Lo   Edit box (256 chars)
+            - Cl   Edit box (256 chars)
+
+        - Delete Quote Dialog
+
+            - Delete Edit box (256 characters)
+
+        - Create Indicator Template Dialog
+
+            - Name Edit box (32 chars)
+            - Path Edit box (128 chars)
+            - Period Options Edit box (80 chars)
+
+        - Create Window Layout Dialog
+
+            - Name Edit box (32 chars)
+            - DX Incr Edit box (256 chars)
+            - View Title Edit box (256 chars)
+            - Grids/Axis Edit box (256 chars)
+            - Real Estate Edit box (256 chars)
+        
+        - Create Trading Rule Dialog
+        
+            - Name Edit box(32 chars)
+            - Buy Edit box (256 chars)
+            - Sell Edit box (256 chars)
+            
+        - Generate Trading Report Dialog
+        
+            - Commission Edit box (32 chars)
+            - Path Edit box (128 chars)
+
+        - Font Size Dialog
+
+            - Size Edit box (256 chars)
+
+        - Line Width Dialog
+
+            - Line Width Edit box (256 chars)
+
+        - Text File Format Dialog
+
+            - Load String Edit box (256 chars)
+            - Load Delimiters Edit box (256 chars)
+            - Save String Edit box (256 chars)
+
+A.2 - Tool Bar Buttons
+
+    Test the following tool buttons:
+
+        - New Button
+        - Open Button
+        - Save Button
+        - Save Template Button
+        - Exit Button
+        
+        - Create Window Layout Button
+        - Delete Window Layout Button
+        - Create Indicator Template Button
+        - Delete Indicator Template Button
+        - Create Rule Button
+        - Delete Rule Button
+        - Generate Report Button
+        
+        - Color Button
+        - Text File Format Button
+        
+        - New Window Button
+
+A.3 - Hot Key Sequences
+
+    Test the following Accelerator sequences:
+
+        - Ctrl+N       - New document
+        - Ctrl+O       - Open document
+        - Ctrl+S       - Save document
+        - Ctrl+A       - Save document As
+        - Ctrl+Shift+S - Save template
+
+        - Ctrl+Q       - Add new quote
+        - Ctrl+Shift+Q - Delete quote
+
+        - Ctrl+T       - Create Indicator Template
+        - Ctrl+Shift+T - Delete Indicator Template
+        - Ctrl+L       - Create Window Layout
+        - Ctrl+Shift+L - Delete Window Layout
+        - Ctrl+Y       - Create Trading Rule
+        - Ctrl+Shift+Y - Delete Trading Rule
+        - Ctrl+Shift+G - Generate Trading Report
+
+        - Ctrl+F       - Font Size
+        - Ctrl+R       - Color
+        - Ctrl+D       - Line Widths
+        - Ctrl+M       - Text File Format
+        - Ctrl+B       - Quote Box
+        - Ctrl+K       - Tracker
+
+        - Ctrl+E       - Cascade windows
+        - Ctrl+I       - Tile
+        - Ctrl+G       - Arrange Icons
+        - Ctrl+W       - New Window
+
+        - Ctrl+U       - About Quote
+
+A.4 - Value Testing
+
+    Test the following edit box values (DO BOTH POSITIVE AND
+    NEGATIVE TESTS):
+
+        - Add Quote Dialog
+
+            - Invalid date formats e.g., 3/5, 3//5/96, Jan/1/1996 etc.
+            - Century Tests:
+                - 69 -> 2069
+                - 70 -> 1970
+                - 99 -> 1999
+                - 100 -> 100
+            - Month tests:
+                - Do every month
+                - Do Feb 28, 1995 --> OK
+                - Do Feb 29, 1995 --> FAIL
+                - Do Feb 28, 1996 --> OK
+                - Do Feb 29, 1996 --> OK
+            - 0 <= Lo <= Cl <= Hi
+            - 0 <= Vl
+                
+        - Delete Quote Dialog
+
+            - Repeat date tests above.
+
+        - Create Indicator Template Dialog
+                           1
+            - Name is valid
+
+        - Period Options Dialog
+
+            - 0 < Period length is < 1024
+
+        - Create Window Layout Dialog
+                           1
+            - Name is valid
+            - 0 < DX Increment
+            - 0 < grids/axis
+            - 0 < percentages
+            - percentages sum to 100
+
+        - Font Size Dialog
+
+            - 0 < Font Size
+
+        - Line Widths Dialog
+            
+            - 0 <= Line Widths
+
+    Notes:
+        1.  Valid names are those which are:
+                - between 1 and 32 chars, inclusive
+                - starts with an alpha character
+                - contains alpha-numeric characters as well as the 
+                  '-' character
+
+
+Category B - Indicators
+-----------------------
+
+B.1 - Indicator Library Tests
+
+    Test the following for each I of the following supported
+    indicated libraries, using the rsi.dat data file and a period
+    length of 4:
+
+        sma.ind
+        wma.ind
+        xma.ind
+        rsi.ind
+        d-sma.ind
+        d-wma.ind
+        d-xma.ind
+        d-rsi.ind
+
+        Also test:
+
+        sma( 1 )
+        wma( 1 )
+        xma( 1 )
+        rsi( 1 ) --> should Fail.
+        rsi( 2 )
+        ...and their derivatives.
+
+        - I generates the correct data on the view.
+        - I generates the correct number of points on the view.
+        - I generates the correct offset on the view.
+        - I generates the correct data in a text file.
+        - I generates the correct number of points in a text file.
+        - I generates the correct offset in a text file.
+        - I generates horizontal lines for and only for I in { rsi.ind }.
+
+
+Category C - View Tests
+-----------------------
+
+C.1 - Basic View Tests
+
+    - Test the hi, lo, cl values on the graph are correct.
+    - Test the volume values on the graph are correct.
+    - Test a couple of indicator values on the graph are correct.
+    - Test the 0-line on the graph is correct.
+    - Test any horizontal lines on the graph are correct.
+    - Test to ensure the min and max values are correct:
+        - Do 'global view' and 'local view' tests for the following:
+            - Volume min/max
+            - Quote min and Quote max
+            - Quote min and Ind max
+            - Ind min and Quote max
+            - Ind min and Ind max
+            - Quote min and horz line max
+            - horz line min and quote max
+            - horz line min and horz line max
+    - Test to ensure the first quote and first volume values are correct.
+    - Test to ensure the first indicator values displayed are correct.  Do
+      this for at least 2 indicators.
+
+
+Category D - Text File Tests
+----------------------------
+                        2
+D.1 - Text Loading Tests
+
+    - Test to ensure bad load strings are rejected:
+        - Multiple $hi's, etc.
+        - No $hi's, $lo's, etc -> there must be EXACTLY one of these each!!
+        - Unrecognized $'s, other strings, etc. (e.g, $high, hello, etc.)
+        - Names such as $h, $high, which are defined, are managed correctly.
+          (e.g., say there is an indicator template called $high, make
+           sure it is managed correctly, and it and $hi are not confused.)
+    - Test loading a file with unsorted dates.
+    - Test loading a file with non-unique dates -> should reject the file.
+    - Test loading a file with 0 volumes.
+    - Test loading a file with bad data.
+    - Test loading a file of max. line length.
+    - Test loading a file of max. line length + 1.
+    - Test loading a file with max. load string length.
+    - Test loading a file with max. load string length + 1. -> can't do
+      most likely.
+    - Test $ig values.
+    - Test loading a file with max. delimiters present.
+    - Test loading a file with no delimiters present.
+    - Test loading a file with escaped delimiters present:
+        - \t
+        - \b
+        - \xxx, xxx is a decimal number.
+                       2
+D.2 - Text Saving Tests
+
+    - Test saving a file of max. line length.
+    - Test saving a file of max. line length + 1.
+    - Test saving a file with escape sequences:
+        - \t
+        - \b
+        - \xxx, xxx is a decimal number.
+    - Test names like $h, $high, etc.
+    - Test saving non-existent indicators.
+    - Test saving text data itself: e.g., $hi // Hello World // $lo $cl $vl
+
+2. These tests may be assisted by modifying the size of cbTextMax.
+
+
+Category E - Manual Entry Tests
+-------------------------------
+
+E.1 - Adding Quotes
+
+    - Test to ensure adding a quote at the end.
+    - Test to ensure adding a quote in the middle.
+    - Test to ensure adding a quote at the beginning.
+    - Test to ensure you can't add duplicate quotes - you would
+      end up modifying the quote instead.
+
+E.2 - Deleting Quotes
+
+    - Test to ensure deleting a quote at the end.
+    - Test to ensure deleting a quote at the beginning.
+    - Test to ensure deleting a quote in the middle.
+    - Test to ensure deleting a non-existent quote.
+
+
+Category F - Template File Tests
+--------------------------------
+
+F.1 - Indicator Templates
+
+    - Test to ensure you can add an indicator template.
+    - Test to ensure you can't add a 'boxctrl' indicator template.
+    - Test to ensure you can't add a template with an invalid path.
+    - Test to ensure you can't delete an indicator template in use.
+    - Test to ensure you can't add an indicator template twice.
+    - Test to ensure you can delete a normal indicator template.
+
+F.2 - Window Layouts
+
+    - Test to ensure you can add a window layout.
+    - Test to ensure you can delete a normal window layout.
+    - Test to ensure you can't delete a window layout in use.
+    - Test to ensure you can't ever get in a situation when you
+      include an indicator more than once, or exclude an indicator
+      template more than once.
+    - Test to ensure the union of excluded and included indicator templates
+      is all indicator templates.
+    
+F.3 - Trading Rules
+
+    - Test to ensure you can add a trading rule.
+    - Test to ensure you can delete a normal trading rule.
+    - Test to ensure you can't delete a trading rule in use (in a window layout).
+    - Test to ensure you can add a trading rule with no 'text'.
+    - Test to ensure you can add a valid trading rule with max. text (use a lot
+      of white space).
+      
+Category G - Memory Tests
+-------------------------
+
+G.1 - Low Memory Conditions
+
+    - Test to ensure Quote recovers loading a qt file with low memory.
+    - Test to ensure Quote recovers saving a qt file with low memory.
+    - Test to ensure Quote recovers loading a txt file with low memory.
+    - Test to ensure Quote recovers saving a txt file with low memory.
+    - Test to ensure Quote recovers loading a template file with low memory.
+    - Test to ensure Quote recovers saving a template file with low memory.
+    - Test to ensure Quote recovers adding a quote with low memory.
+    - Test to ensure Quote recovers deleting a quote with low memory.
+    - Test to ensure Quote recovers adding an indicator template with low memory.
+    - Test to ensure Quote recovers deleteing an indicator template with low memory.
+    - Test to ensure Quote recovers adding a window layout with low memory.
+    - Test to ensure Quote recovers deleting a window layout with low memory.
+    - Test to ensure Quote recovers displaying the about box with low memory.
+    - Test to ensure Quote recovers opening a new window with low memory.
+    - Test to ensure Quote/its indicators release all global memory objects
+      and other resources.
+    - Test to ensure if we run out of memory during construction of the
+      template object, as well as the QFormat object.
+    - Test to ensure Quote recovers adding a trading rule with low memory.
+    - Test to ensure Quote recovers deleting a trading rule with low memory.
+    - Test to ensure Quote recovers generating a report with low memory.
+
+Category H - Tracker Tests
+--------------------------
+
+H.1 - Quote Tracking Tests
+
+    Repeat this test suite for { small window, large window }:
+
+    - Test to ensure that the tracker accurately reflects the quote
+      during the opening of a new window.
+    - Test to ensure that the tracker accurately reflects the quote
+      during movement from within to within the tracking region.
+    - Test to ensure during movement from within to outside
+      the tracking region.
+    - Test to ensure during movement from outside to within.
+    - Test to ensure during window movement such that tracker stays
+      within.
+    - Test to ensure during window movement such that tracker moves
+      from within to outside tracking region.
+    - Test to ensure during window movement such that tracker moves
+      from outside to within tracking region.
+    - Test to ensure during window sizing such that tracker stays
+      within.
+    - Test to ensure during window sizing such that tracker moves
+      from within to outside tracking region.
+    - Test to ensure during window sizing such that tracker moves
+      from outside to within tracking region.
+      
+
+Category I - Miscellaneous Tests
+--------------------------------
+
+I.1 - File Tests
+
+    - Test to ensure Quote behaves correctly during saving a {qt, txt}
+      file which already exists (replace file).
+    - Test to ensure Quote behaves correctly during Query End Session
+      if document has not been saved.
+    - Test to ensure Quote behaves correctly during Query End Session
+      if template has not been saved.
+    - Test to ensure Quote behaves correctly during new for {qt, txt} 
+      (save document dialog?).
+    - Test to ensure Quote behaves correctly during open for {qt, txt}.
+    - Test to ensure Quote recovers from loading non-existent paths.
+    - Test to ensure Quote recovers from saving non-existent paths.
+    - Test to ensure Quote recovers from saving read-only files.
+    - Test to ensure Quote recovers from saving read-only template files.
+    - Test to ensure that a file with all 0-volumes loads properly.
+
+I.2 White Box Tests
+
+    - OPTIONS contains the lOptions parameter.  lOptions may be treated
+      as a pointer.  A test should be done to ensure than lOption as
+      a pointer is correct.
+    - For the different indicators.  Test to ensure that nPeriod and
+      nPoints are calculated correctly, and also are managed correctly
+      during negative testing (i.e., nPeriod > nPoints, etc.).  This must
+      also be done for any routines in statpak (i.e., Mean( ), ExpSmooth( ),
+      etc.).  These tests will include:
+
+          -Mean( )
+          -ExpSmooth( )
+          -FirstDiff( )
+          -wma( )
+          -rsi( ) -> confirm with RSI definition for nPeriod/nPoints as well.
+          -d-wma( )
+          -d-rsi( )
+
+    - Test to ensure that indicator periods are 1 <= n <= 1023.
+    - Test to ensure that indicator periods edit box is limited to 80 chars.
+    - Test to ensure that QView::CalculateRange( ) and 
+      QView::CalculateVolumeRange( ) work.  For QView::CalculateRange( ),
+      we'll need a few cases:
+
+      - Range is defined by the range of the quotes.
+      - Range is defined by the range of the indicators.
+      - Range is defined by the range of the horz. lines.
+     
+    - Test to ensure that the wrong version of QObject terminates Quote.
+    - Test to ensure that quotes with values > 10000 don't display.
+    - Test default/alternate template names.
+    - Test indicators with very short period lengths.
+
+I.3 Cache Tests
+
+    - Test to ensure adding/deleting a quote will trash the entire cache.
+    - Test to ensure creating a new document will trash the entire cache.
+    - Test to ensure opening a new document will trash the entire cache.
+    - Test to ensure that an indicator is cache'd in the following circumstances:
+        - When it is saved in a text file.
+        - When a signal on a view is present.
+        - When the indicator itself is on the view.
+        - When it is used to generate a report.
+    - Test to ensure an indicator is deleted if it is modified/deleted.
+    
+Category J - Trading Rule Tests
+-------------------------------
+
+J.1 - Parser Tests
+
+    - Perform the following negative tests:
+    
+        - unexpected token at end of rule (rule)
+        - end-of-input (comparison)
+        - expecting ']' character (comparison)
+        - end-of-input (comparison)
+        - invalid comparison operator found (comparison)
+        - Divide by zero (term)
+        - End of input (primary)
+        - expecting ')' character (primary)
+        - unexpected token (primary)
+    
+    - Perform the following semantic tests (note: *white
+      box testing* may be necessary here):
+      
+        // primary
+        - #sma < .1
+        - #sma < 0.1
+        - #sma < -.1
+        - #sma < +.1
+        - #sma < (1)
+        - #sma < $cl
+        
+        // term
+        - #sma < 1 * 2 + 3
+        - #sma < 1 + 2 * 3
+        
+        // expr
+        - #sma < 1 + 2 - 3
+        - #sma < 1 - 2 + 3
+        - #sma < 1 - ( 2 + 3 )
+        
+        // comparison
+        - #sma < 1
+        - #sma > 1
+        - #sma <= 1
+        - #sma >= 1
+        - #sma == 1
+        - #sma != 1
+        - [ #sma < 1 ] or [ #sma > 1 ]
+        
+        // condition
+        - 1 < 2 and 2 < 3 or 4 < 3
+        - 1 < 2 or 2 < 3 and 4 < 3
+        - [ 1 < 2 and 2 < 3 ] or [ 4 < 3 ]
+        - [ 1 < 2 ] and [ 2 < 3 or 4 < 3 ]
+        - [ 1 > 2 ] or [ 2 < 3 and 4 < 3 ]
+
+J.2 - Signal Tests
+
+    - Signals should be generated on the view and in the report correctly
+      according to the trading rule.
+        - Test to ensure a trading report as defined by:
+            Buy when $cl > #sma
+            Sell when $cl < #sma
+          generates the correct signals.
+        - Also do a more complicated test:
+            Buy when $cl > #sma and #rsi > 50
+            Sell when $cl < #sma and #rsi < 50
+        - Do other complicated tests.
+        - Test to ensure the signals are generated properly on the view and
+          in the report.  
+        - Test to ensure if you don't have a document in memory.
+        - Test to ensure if you define a rule such as '#noexist', or $CL.
+          
+        
+Category K - Report Tests
+-------------------------
+
+K.1 - Report output
+
+    - The following must be tested:
+        -Test to ensure the number of trades is correct with 'ignore' option
+        -Test to ensure the number of trades is correct with 'no ignore' option
+        -Test to ensure commission rate is correct
+        -Test negative, and very large, commission rates
+        -Test zero commission rates
+        -Test to ensure total profit is correct with 'ignore' option
+        -Test to ensure total profit is correct with 'no ignore' option
+        -Test to ensure average profit is correct with 'ignore' option
+        -Test to ensure average profit is correct with 'no ignore' option
+        -Test to ensure output with syntax error in rule
+        -Test to ensure if we can't open the file for writing
+        -Test to ensure bad path name.
+        -White box test to ensure if one of the fprintf fails.
+
+
+Category L - Version 1.2.3 Functionality
+----------------------------------------
+
+L.1 - Recursive Rules
+
+    - The following functionality must be tested for recursive rules:
+        -Test to ensure an AND condition between two rules is
+         executed correctly.  Repeat this with a report file.
+        -Test to ensure an OR condition between two rules is
+         executed correctly.
+        -Test to ensure you can recurse 4 levels deep, excluding
+         the top-level rule.
+        -Test to ensure you *cannot* recurse 5 levels deep.
+        -Test to ensure if you recurse for a non-existent rule,
+         this is handled correctly.
+        -Test to ensure if you recurse for a non-existent rule at
+         recurse level 2, this is handled correctly.
+        -Put a rule in the global cache.  Now, update that rule.
+         Dump the global cache.  Make sure the rule is gone.
+        -Put a rule in the global cache.  Perform a FILE/NEW.  Make
+         sure it is gone.
+        -Put a rule in the global cache.  Perform a FILE/OPEN.  Make
+         sure it is gone.
+        -Add/Delete rules with low memory.  Make sure the global
+         cache becomes empty.
+
+L.2 - Horizontal Tiling
+
+    -Test to ensure that windows tile horizontally.
+
+L.3 - New Arrowheads
+
+    -Test to ensure that arrowheads are drawn correctly for signals.
+
+L.4 - Bar Graphs with dxincr == 1
+
+    -Test to ensure bar graphs come out properly in these cases:
+        -All positive values
+        -All negative values
+        -Some positive, some negative values
+
+
+Category M - Version 1.2.5 Functionality
+----------------------------------------
+
+These test suites will focus on indicators performing
+correct calculations.  This will include the testing
+of changes made to the STATPAK library.
+
+** Note: the Linear Regression Standard Deviation
+         indicator was found to be designed incorrectly
+         and will need to be re-written and subsequently
+         re-tested.
+
+M.1 - Options2 Testing - PASS
+
+    - Test to ensure that Options2 data is stored and
+      retrieved correctly using the LGSTDEV indicator.
+
+M.2 - Options3 Testing - PASS
+
+    - Test to ensure that Options3 data is stored and
+      retrieved correctly using MACD and/or STOCH indicators.
+
+M.3 - Regression Tests - PASS
+
+    - Using the old version of Quote and its indicators
+      perform comparison (regression) tests to ensure the 
+      following indicators are still performing correctly
+      (this should also include boundary tests where
+      applicable):
+
+      New Indicator         Old Indicator
+      -------------         -------------
+      STOCH( n, 0, 0 )      STOCH( n )
+      MACD( 26, 12, 9 )     MACD( )
+      SMA( n )              SMA( n )
+      XMA( n )              XMA( n )
+      RSI( n )              RSI( n )
+      CCI( n )              CCI( n )
+      ROC( n )              ROC( n )
+      NEWHI( n )            NEWHI( n )
+      NEWLO( n )            NEWLO( n )
+      _SMA( n )             _SMA( n )
+      _WMA( n )             _WMA( n )
+      _XMA( n )             _XMA( n )
+
+M.4 - New MACD Tests - PASS
+
+    - Perform the following MACD tests:
+
+             A   B   C
+      ------------------
+      MACD(  1,  1,  0 )
+      MACD(  1,  2,  0 )
+      MACD(  2,  1,  0 )
+      MACD(  2,  2,  0 )
+      MACD(  5,  8,  0 )
+      MACD(  1,  1,  1 )
+      MACD(  1,  2,  1 )
+      MACD(  2,  1,  1 )
+      MACD(  2,  2,  1 )
+      MACD(  5,  8,  1 )
+      MACD(  1,  1,  5 )
+      MACD( 26, 12,  9 )
+      
+M.5 - New STOCH Tests - PASS
+
+    - Perform the following STOCH tests:
+
+              A   B   C
+      -------------------
+      STOCH(  1,  0,  0 )
+      STOCH(  2,  0,  0 )
+      STOCH( 40,  0,  0 )
+      STOCH(  2,  1,  0 )
+      STOCH(  4,  2,  0 )
+      STOCH(  2,  1,  1 )
+      STOCH(  4,  2,  1 )
+      STOCH(  2,  1,  4 )
+      STOCH(  4,  2,  4 )
+
+M.6 - MACD Boundary Tests - PASS
+
+    - Perform the following boundary tests:
+
+             A   B   C      Doc Size        Expected Result
+      -----------------------------------------------------
+      MACD(  0,  1,  1 )           1                      F
+      MACD(  1,  0,  1 )           1                      F
+      MACD(  1,  1,  0 )           0                      F
+      MACD(  1,  1,  0 )           1                      T
+      MACD(  2,  1,  1 )           1                      T
+      MACD(  2,  1,  1 )           2                      T
+      MACD(  2,  1,  2 )           2                      T
+
+M.7 - STOCH Boundary Tests - PASS
+
+    - Perform the following boundary tests:
+
+              
+              K  SK  SD     Doc Size        Expected Result
+      -----------------------------------------------------
+      STOCH(  1,  0,  0 )          1                      T
+      STOCH(  2,  0,  0 )          1                      F
+      STOCH(  2,  0,  0 )          2                      T
+      STOCH(  0,  1,  1 )          2                      F
+      STOCH(  2,  0,  1 )          2                      F
+      STOCH(  4,  3,  2 )          6                      F
+      STOCH(  4,  3,  2 )          7                      T
+      
+M.8 - Linear Regression Tests - PASS
+
+    - Perform the following linear regression tests:
+
+             N              Doc Size        Expected Result
+      -----------------------------------------------------
+      LREG(  0 )                  19                      F - Note Executable
+      LREG(  1 )                  19                      F
+      LREG(  2 )                  19                      T
+      LREG(  4 )                  19                      T
+      LREG( 19 )                  19                      T
+      LREG( 20 )                  19                      F
+      LREG(  2 )                   2                      T
+      LREG(  2 )                   1                      F
+
+M.9 - Linear Regression Boundary Tests - PASS
+
+    - Perform the following linear regression boundary tests:
+
+      (captured in test case M.8)
+
+M.10 - Standard Deviation Tests - PASS
+
+    - Perform the following standard deviation tests:
+                
+                N   n      Doc Size         Expected Result
+      -----------------------------------------------------
+      LGSTDEV(  0,  0 )           19                      F 
+      LGSTDEV(  1,  0 )           19                      F
+      LGSTDEV(  2,  0 )           19                      F
+      LGSTDEV(  3,  0 )           19                      T
+      LGSTDEV(  1,  1 )           19                      F
+      LGSTDEV(  2,  2 )           19                      F
+      LGSTDEV( 19,  0 )           19                      T 
+      LGSTDEV( 19,  1 )           19                      T
+      LGSTDEV( 20,  0 )           19                      F
+      LGSTDEV(  4,  1 )           19                      T
+      LGSTDEV(  3,  0 )            3                      T
+      LGSTDEV(  3,  0 )            2                      F
+    
+M.11 - Standard Deviation Boundary Tests - PASS
+
+    - Perform the following standard deviatin boundary tests:
+
+    (captured in test case M.10)
+
+M.12 - Linear Regression First Differences Tests - PASS
+
+    - Perform the following linear regression first differences tests:
+
+              N             Doc Size        Expected Result
+      -----------------------------------------------------
+
+      _LREG(  0 )                 19                      F - Not Executable
+      _LREG(  1 )                 19                      F
+      _LREG(  2 )                 19                      T
+      _LREG(  3 )                 19                      T
+      _LREG( 18 )                 19                      T
+      _LREG( 19 )                 19                      F
+      _LREG( 20 )                 19                      F
+       
+       LREG(  2 )                  2                      T
+      _LREG(  2 )                  2                      F
+       LREG(  2 )                  3                      T
+      _LREG(  2 )                  3                      T
+
+M.13 - Linear Regression First Differences Boundary Tests - PASS
+
+    - Perform the following linear regression first differences boundary tests:
+
+      (captured in test case M.12)
+
+
+Category N - User Defined Indicator Functionality - PASS
+-------------------------------------------------
+
+    -Ensure that all normal indicators are disabled
+     in the custom indicator dialog box.
+    -Ensure that all custom indicators are disabled
+     in the normal indicator dialog box.
+    -Ensure that the indicator definition performs
+     correctly when using the following tokens:
+
+     keywords:
+         $false, $true, $hi, $lo, $cl, $vl, $max, $min, $mean, $x, $count
+     normal indicators
+     custom indicators
+     [ ]
+     ( )
+     recursive rules(?)
+     +, -, *, /
+     and, or
+     floats
+     comparison operators
+    
+    -Ensure that custom indicators may be plotted, and saved into
+     a file.
+    -Ensure that custom indicators may be used as a part of rules.
+
+
+Category O - Annualized Profit Summary -PASS
+--------------------------------------
+
+    -Ensure that annualized profit summary works for
+     no trades.
+    -Ensure that annualized profit summary works for
+     single trade within same year.
+    -Ensure that annualized profit summary works for
+     single trade spanning a new year.
+    -Ensure that annualized profit summary works for
+     single trade spanning just one day.
+    -Ensure that annualized profit summary works for
+     a trade entered on very first day.
+    -Ensure that annualized profit summary works for
+     a trade closed off on the very last day.
+    -Ensure that annualized profit summary works for
+     3 trades, over a year or two.  Do this for a couple
+     of files, in the following fashion:
+        -No ignoring transactions
+        -Ignore first trade only
+        -Ignore incomplete trade only
+        -Ignore both of the above.  
+
+
+Category P - Ignore Incomplete Transactions/First Trades (profit report) - PASS
+--------------------------------------------------------
+
+These test probably can use the old version of Quote, Quote v. 1.1.05,    
+to preform regression tests.
+
+    -Ensure that the reported results are accurate in the following
+     cases:
+         -No ignoring transactions
+         -Ignoring first trade only
+         -Ignoring incomplete trade only
+         -Ignoring both of the above.
+    -Furthermore, repeat the above test cases for files with no
+     signals, exactly one signal, exactly two signals, a signal
+     which sells out before the end of data, and a signal which
+     does not sell out before the end of data.
+
+
+Category Q - Filtered Rules - PASS
+---------------------------
+
+    -Ensure that the following are performed correctly:
+        -We filter out a first trade properly.
+        -We filter out a last trade properly.
+        -We filter out a middle trade properly.
+    -Repeat the above, ignoring first trade.
+    -Repeat the agove, ignoring incomplete trade.
+    -Ensure that there is agreement between the view,
+     the profit table, and the profit report.
+    -Ensure that a filter of $true is the same as a 'blank'
+     filter.
+    -Ensure that we can use several tokens as a filter:
+        -Normal comparison operators.
+        -keywords.
+        -Recursive rules.
+    -Ensure that if an indicator is unavailable, the filter
+     *is* applied (i.e., the signal is filtered out).
+
+
+Category R - Print Support - PASS
+---------------------------------
+
+    -Ensure that printing is disabled when there are no window
+     layouts defined.
+    -Ensure that printing works.
+    -Ensure that print setup works.
+    -Ensure that you can cancel a print job.
+
+
+Category S - Profit Table Support - PASS
+---------------------------------
+
+    -Ensure that profit table results are correct without ignoring
+     any trades.
+    -Ensure that profit table results are correct ignoring first 
+     trades.
+    -Ensure that profit table results are correct ignoring incomplete
+     trades.
+    -Ensure that profit table results are correct ignoring both types
+     of trades.
+    -Ensure that profit table results are correct ignoring incomplete
+     trades, but for which an incomplete trade does not exist.
+    -Ensure that profit table results are 'Corrupt' for a real, corrupt
+     file.
+    -Ensure that profit table results are 'Corrupt' for a file with not
+     enough data.
+    -Ensure that profit table mins/maxes/averages are correct - 1 file.
+    -Ensure that profit table mins/maxes/averages are correct - n files.
+    -Ensure that the profit table can load multiple *.TXT files.
+    -Ensure that the profit table can load multiple *.QT files.
+    -Ensure that the profit table can load multiple *.* files.
+
+
+Category T - Test qt_upd more thoroughly - PARTIAL PASS
+----------------------------------------
+
+    -Ensure that when the QT_DATA environment variable is
+     not defined that the situation is handled gracefully. (OK)
+    -Ensure that when you can't open the QUOTE.MAP file,
+     the situation is handled gracefully. (OK)
+    -Ensure that when you can't open the UPDATE file,
+     the situation is handled gracefully. (OK)
+    -Ensure that an invalid # of parameters are handled
+     gracefully. (OK)
+    -Ensure the following boundary conditions are handled:
+        256 char line (NOT TESTED)
+        257 char line (should fail) (NOT TESTED)
+    -Ensure that when it can't open QUOTE.TMP for writing,
+     the situation is handled gracefully. (OK)
+    -Ensure that bad data files are handled gracefully. (FAILS)
+    -Ensure that bad update files are handled gracefully. (FAILS)
+    -Ensure that you can insert data at the very beginning
+     of the file. (OK)
+    -Ensure that you can insert data at the very end
+     of the file. (OK)
+    -Ensure that you can insert data in the middle of the file. (OK)
+    -Ensure that you can't insert the same date twice in the file. (OK)
+
+
+Category U - Test $YMD Functionality - PASS
+------------------------------------
+
+-Ensure that we can load $ymd correctly.
+-Ensure that we can store $ymd correclty.
+-Ensure that $ymd$yr fails.  Repeate for $ymd$mn, $ymd$dy.
+-Perform boundary tests using $ymd, both for loading
+ and saving.
+
+
+Category V - Views can be 64 chars long now - PASS
+--------------------------------------------------
+
+    -Ensure views can be 64 chars long.
+    -Ensure that 65-char views are chopped.
+
+
+Category W - Test window names such as fire, Fire, etc. - PASS
+--------------------------------------------------------------
+
+    -Ensure that these work for:
+        -Window Layouts
+        -Rule names
+        -Normal Indicator Templates
+        -Custom Indicator Templates
+
+
+Category X - Print line #'s if text files are corrupt - PASS
+------------------------------------------------------------
+
+    -Ensure that if a file is corrupt, we print out the
+     correct line number.
+
+
+Category Y - Recurse level is set to 8(3) - PASS
+-----------------------------------------
+
+    -Ensure that self-referencing rules are prevented.
+    -Ensure that self-referencing custom templates are prevented.
+    -Ensure that loops between rules and custom templates are
+     prevented.
+    -Ensure that 8 works, but 9 does not, as the recurse
+     level.  Perform this in the following circumstances:
+         -Rules only.
+         -Custom indicators only.
+         -Combination of rules and indicators.
+
+
+Category Z - Draw Lines before Bars - PASS
+------------------------------------------
+
+-Ensure that bar indicators are drawn before line indicators.
+
+
+Category AA - New keywords - PASS
+---------------------------------
+
+The following new keywords have been added:
+
+$min
+$max
+$x (0-based)
+$count
+$mean
+$false
+$true
+
+    -Ensure that they behave correctly for files with
+        -0 elements
+        -1 element
+        -n elements
+
+
+    Name  |  19    2    1
+    ------+--------------
+      min |   P    P    P
+      max |   P    P    P
+     mean |   P    P    P
+    stdev |   P    P  n/e
+        x |   P    P    P
+    count |   P   ok   ok
+           
+
+Category AB - Defining Indicator Template, Change of Path - PASS
+---------------------------------------------------------
+
+When the user modifies the path of an indicator template,
+the OK button must be disabled to force him to enter the
+OPTIONS again.  Otherwise, he could cross the PATH of
+one indicator with the OPTIONS of another.
+
+
+Category AC - Retest Cache Structure - PASS
+------------------------------------
+
+Re-test the Caching structure by traversing recursive rules
+and custom templates at the same time (i.e., using the recurse
+level value).
+
+Re-test the Caching structure is cleared properly if the user,
+for example, adds a new quote.  A code inspection will also
+be warranted.
+
+Ensure that the cache correctly stores the results of the keywords
+(i.e., $min, $max, $mean, $count, ... ).
+
+
+Category AD - Recursive rules - PASS
+-----------------------------
+
+Rucursive rules have been changed so that a recursive rule, A, may
+take on the values 0 (A not in a buy stage) or 1 (A in a buy stage).
+
+-Ensure that this is the case.
+
+
+Category AE - Signals coming @ beginning of a period - PASS
+----------------------------------------------------
+
+Rule B: buy at day 50
+Rule A: buy when ~B == 0 
+
+Ensure this doesn't result in A giving a signal until at least day 50.
+
+
+Category AF - New Memory Tests
+------------------------------
+
+Perform the following tests with low memory:
+    -Defining a custom template.
+    -Defining a filtered rule.
+    -Defining a recursive rule.
+    -Printing a chart.
+
+
+Category AG - Quote 1.2.01 Functionality
+----------------------------------------
+
+Perform the following tests:
+
+    -Ensure functions perform correctly using
+     native values.
+    -Ensure functions perform correctly using
+     hard indicators.
+    -Ensure functions perform correctly using
+     soft indicators.
+    -Test boundary conditions of cbFuncNameMax.
+    -Test native values: $hi, $lo, $cl, $vl.
+    -Test new stocastics and MACD indicators.
+    -Test parser order of operations.
+    -Test invalid functions:
+        @mov( $hi )
+        @slope( $hi, 3 )
+        @mov( $hi, 5, 2 )
+        etc.
+
+    -Test to make sure the view still works for:
+        -Line indicators, dxincr = 1
+        -Bar indicators, dxincr = 1
+        -Line indicators, dxincr > 1
+        -Bar indicators, dxincr > 1
+
+        Perform these tests with some indicators all
+        above 0, all below 0, and some crossing zero.
+        (Standard deviation is a good candidate).
+
+
+Category AH - Quote Version 1.2.02 Functionality
+------------------------------------------------
+
+Perform the following tests:
+
+    -Ensure that the following positive tests work
+     (in terms of the parameters):
+        -@mov( )     - 2
+        -@movx( )    - 2
+        -@min( )     - 2
+        -@max( )     - 2
+        -@rate1( )   - 2
+        -@rate2( )   - 2
+        -@shift( )   - 2
+        -@linreg( )  - 2
+        -@newmin( )  - 2
+        -@newmax( )  - 2
+        -@abs( )     - 1
+        -@corr( )    - 3
+        -@stdev( )   - 2
+    -Repeat the above, using 1 extra parameter.
+    -Repeat the above, using 1 less parameter.
+    -Perform the following boundary tests, using RSITEST.TXT, closes:
+
+    Function    Fail Success Success    Fail
+    ----------------------------------------
+    @mov           0       1      19      20
+    @movx          0       1      19      20
+    @min           0       1      19      20
+    @max           0       1      19      20
+    @rate1         0       1      18      19
+    @rate2         0       1      18      19
+    @shift         0       1      18      19
+    @linreg        0       1      19      20 
+    @newmin        0       1      19      20
+    @newmax        0       1      19      20
+    @abs           0       1      19      20
+    @corr          1       2      19      20
+    @stdev         1       2      19      20
+
+    In the success paths, ensure that the output is correct.
+
+    -Perform the following standard tests, using RSITEST.TXT:
+
+    @mov   ( $cl, 4 )
+    @movx  ( $cl, 4 )
+    @min   ( $cl, 4 )
+    @max   ( $cl, 4 )
+    @rate1 ( $cl, 4 )
+    @rate2 ( $cl, 4 )
+    @shift ( $cl, 4 )
+    @linreg( $cl, 4 )
+    @newmin( $cl, 4 )
+    @newmax( $cl, 4 )
+    @abs   ( $cl )
+    @corr  ( $hi, $lo, 4 )
+    @stdev ( $cl, 4 )
+
+    -Perform the following special tests:
+
+    @stdev( #sma4, 3 )
+    @corr ( #sma4, #sma6, 3 )
+    @corr ( #sma6, #sma4, 3 )
+
+    -Perform the following special test:
+    
+    #rsi: {rsi.ind, 14}
+    #rsi_last_week: @shift( #rsi, 5 )
+    @corr( #rsi_last_week, $cl, 4 )
+
+    -Perform a test to ensure that the following functionality
+     has been removed:
+     $mean
+     $stdev
+     $min
+     $max
+     @slope( )
+    
+    -Perform a test to ensure that the text color for dates
+     is correct.
+
+    -Perform the following tests to ensure that annualized
+     profit is performing correctly:
+
+
+                           GR Dialog   PT Dialog   GR File  PT File   PT Dialog (3 comp.) PT File (3 comp.)
+     ------------------------------------------------------------------------------------------------------
+     1 profitable trade
+     1 losing trade
+     3 profitable trades
+     3 losing trades
+
+    
+    
+    -Perform a test to ensure that Options2( ) prints out:
+     Period, Param1
+    
+    -Perform a test to ensure that Options3( ) prints out:
+     Period, Param1, Param2
+
+    -Perform a test to ensure that Options2( ) allows periods
+     [1..1023], Param1 [0..1023]
+
+    -Repeat with Options3( ) accordingly.
+
+
+Category AI - Quote Version 1.2.03 Functionality
+------------------------------------------------
+
+Perform the following tests:
+
+These tests are to be repeated with 1 company (loaded company)
+and 3 companies (all companies) respectively:
+
+Ensure all results are accurate:
+
+-0 trades
+-1 winning trade
+-1 losing trade
+-2 trades: 1 winning, 1 losing
+-several winning and losing trades
+-several companies, some corrupt
+
+-Perform regression tests:
+ -Report Generator v. Detailed Trades
+ -Profit table v. Performance Results
+-Re-execute Category E, Category H, some of Category D.
+
+
+Category AI - Quote Version 1.2.05 Functionality
+------------------------------------------------
+
+This version provides scrolling and multi-page support.
+The following functional areas must be tested.
+
+
+Scaling
+
+Scaling should continue to work correctly, allowing
+for:
+
+    -price data only
+    -indicator data only
+    -combination of price data and indicator data
+    
+Repeat these tests over the following conditions:
+
+    -{by chart, by page} X {screen, printer}
+
+Perform boundary tests over the following conditions:
+
+    -price data only
+    -indicator data only
+    -volume data only
+in terms of range calculation.  Repeat for
+    -{by chart, by page} X {screen}
+
+
+Printing
+
+Ensure that when you print, position x, the last x on
+one page, is followed by x+1 on the next page.  Perform
+this as a normal test; repeat as a boundary test (take
+only 1 or two quotes per page, for example).
+
+Scrolling
+
+Ensure that scrolling works correct.  Ensure that you 
+scroll exactly 1/8 of a screen; ensure that x on one
+page is following by x+1 on the next page.  Ensure that
+x on one page is preceeded by x-1 on the previous page.
+Perform this for both cursor left/right, as well as
+page left/page right.
+
+Ensure that you can 'drag' a screen.  Ensure that the
+the position is reflected properly.
+
+Ensure that the status bar reflects reality over a wide
+range of conditions.
+
+Ensure that all of the mouse functionality you can also
+use the keyboard.
+
+Try loading a chart with exactly one quote in it.  Try
+a chart with *no* quotes in it.
+
+Ensure that printing all pages and printing the last
+page only work properly.
+
+
+Category AJ - Quote Version 1.3.00 Functionality
+------------------------------------------------
+
+
+-Ensure that if no rules are defined, the Chart
+ Scanner is disabled.
+-Ensure that you can't enter a negative number
+ of days into the Chart Scanner.
+-Ensure that 14 days works for the Chart Scanner
+ if the signal came 14 days ago.
+-Ensure that 13 days 'does not work' for the
+ Chart Scanner, if the signal came 14 days ago.
+-Ensure that the Chart Scanner works for .TXT files.
+-Ensure that the Chart Scanner works for .QT files.
+-Ensure that the Chart Scanner works for .* files.
+-Ensure that the Chart Scanner works for only 1 file.
+-Ensure that the Chart Scanner works for many files (>= 5).
+-Ensure that the Chart Scanner works for BOTH signals.
+ Repeat with no BOTH signals.
+-Ensure that the Chart Scanner works for BUY signals.
+ Repeat with no BUY signals.
+-Ensure that the Chart Scanner works for SELL signals.
+ Repeat with no SELL signals.
+
+-Ensure that the DAYS( ) calculation is correct in
+ the performance tester, for days within a time
+ change.
+-Ensure that the DAYS( ) calculation is correct across
+ the 2 time changes.
+-Ensure that a general, large, performance tester
+ calculation performs exactly the same as in
+ Quote 1.2.05.
+
+-Ensure that if you enter a different file name for
+ the Chart Scanner, that works.
+-Ensure that if you enter a different path
+ for the Chart Scanner, that works.
+-Ensure that if you enter a bad path for the Chart
+ Scanner, that works.
+-Ensure that 1 or 2 low memory tests work,
+ during Chart Scanning.
+-Ensure that all fields as a part of the Chart
+ Scanner output is correct, including
+ the number of signals (on dialog box too).
+-Ensure that a scan with a days = 1 works.  Use
+ boundary tests.
+
+
+Category AK - Quote Version 1.3.01 Functionality
+------------------------------------------------
+
+-Do a code inspection on the deltas.
+-Ensure that Indicator Templates are grayed out
+ as necessary.
+-Ensure that Custom Templates are grayed out
+ as necessary.
+-Ensure that you can store Point Indicators
+ and retrieve them from the template file.
+-Ensure that a point indicator looks OK
+ with the following dxIncr's:
+ 1, 2, 4, 8
+-Ensure that the Point Indicator lines up
+ with a line which it super-imposes.
+-Ensure that the Point Indicator lines up
+ OK on the very first and last position.
+-Ensure that the Point Indicator scrolls OK.
+
+
+Category AL - Quote Version 1.5.00 Functionality
+------------------------------------------------
+
+-Do a code inspection of the deltas
+
+-Ensure that you can't use @bars_since_entry( ) and
+ @entry_price( ) in anything except sell situations
+ 
+-Ensure that @bars_since_entry( ) and @entry_price( )
+ are functioning correctly
+ 
+-Perform some regression testing on a couple of other
+ functions to ensure that they work correctly
+ 
+-Ensure that the and, or, and [ grouping ] semantics still work correctly
+
+-Do regression testing on all 5 external indicators
+
+-Perform regression testing on the performance tester - use the PVRSI
+ trading rule
+ 
+-Ensure that the Browser option works correctly
+
+-Ensure that the Browser correctly handles a file-not-found circumstance
+
+-Ensure that the Browser can be saved and re-loaded in the template file
+
+-Ensure the length of the string in the Browser option
+
+-Ensure that the Result feature works correctly - both for the dialog
+ and the file - and the default commission is 1%
+ 
+-Ensure that 'results' only shows up for loaded companies 
+
+-Ensure that modifying browser sets the modified template file flag
+
+-Ensure you can create a performance rpt on an empty file
+
+-Perform a report against: 0 trades, 1 trade, multiple trades
+
+-Ensure the accuracy on numResult
+
+-Confirm the report of the dialog/report, with and without numResult
+
+-Test iEntry when $x == 0
+
+-Test with DEBUG Windows
+
+-Regress the Chart Scanner
+
+
+Category AM - Quote Version 1.6.00 Functionality
+------------------------------------------------
+
+-Confirm the version number
+
+-Confirm that Quote cannot load an old template file
+
+-Confirm that leaving the auto-load feature OFF saves/loads in template file
+
+-Confirm that leaving the auto-load feature ON saves/loads in template file
+
+-Confirm that combo-boxes are consistent lengths
+
+-Confirm that New Text Window is always enabled
+
+-Confirm that New Window is disabled if no Window Templates Defined
+
+-Confirm that the data in the Text Window is accurate
+
+-Confirm that you can scroll the Text Window
+
+
+Category AN - Quote Version 1.7.00 Functionality
+------------------------------------------------
+
+-Test memory errors occurring inside DLG.CPP
+
+
+Quote 1.7.00 Testing
+====================
+
+
+General
+-------
+
+-Ensure that hot keys work
+
+-Ensure that buttons work
+
+-Ensure that if you start out with an empty template file, Delete Conditions
+ is disabled
+
+-Ensure that if you start out with a template file with conditions, Delete
+ Conditions is enabled
+
+-Ensure that if you define a condition, Delete Conditions becomes enabled
+
+-Ensure that if you delete all conditions, Delete Conditions becomes disabled
+
+-Ensure that you cannot enter an invalid name for a condition
+
+-Ensure conditions are stored/retrieved correctly.  Define a few indicators,
+ rules, etc. into the mix as well
+
+-Ensure the size limitation of
+    -condition names
+    -condition definitions
+
+-Ensure that you cannot load an old template file
+
+-Ensure that you cannot remove a condition in use (by the window layout)
+
+-Ensure that you can save and restore attached conditions
+
+-Ensure that commission rate is 'sticky'
+
+-Ensure that print margins now default to 0
+
+
+Parser Functionality
+--------------------
+
+-Ensure that a single condition is correct by comparing it to a corresponding
+ Rule
+
+*-Ensure that you can get up to 8 (4?) levels of recursion within conditions, 
+ indicators, and rules
+
+-Ensure that offsets for conditions work
+    -do this with 3 or 4 levels of recursion
+
+-Perform a regression test on offsets for Rules and Indicators
+
+-Perform a regression test by running a performance test against some rule
+ e.g. PVRSI
+
+-Reference tests
+    -Rule refers to an indicator
+    -Indicator refers to a rule
+    -Rule refers to a condition
+    -Condition refers to a rule
+    -Indicator refers to a condition
+    -Condition refers to an indicator
+    -Rule refers to a indicator template
+    -Indicator refers to an indicator template
+    -Condition refers to an indicator template
+
+-Ensure Conditions can take AND and OR expressions, and
+ also contain [ brackets ]
+
+-Ensure that an indicator value which refers to a condition
+ is correct
+
+
+View Tests
+----------
+
+-Ensure if you have 2 conditions defined, the correct one shows
+ up on the view
+
+-Define 4 conditions; place one on each view; ensure this is correct
+
+-Ensure if condition is invalid, view is <unavailable>
+
+-Ensure that both BAR conditions and LINE conditions are displayed
+ correctly
+
+-Ensure that you can print and conditions show up
+
+
+Performance Functionality
+-------------------------
+
+-Ensure that the calculation of Annulized Trade is correct
+    -screen
+    -printout
+
+-Ensure that annualized trade is not done if multiple companies
+    -screen
+    -print-out
+
+-Ensure that Average Annual Trade calculations have disappeared
+    -screen
+    -print-out
+
+-Do a regression test on performance calculations (PVRSI)
+
+-Do a performance test in which a rule uses a condition
+
+
+Stress Tests
+------------
+
+-For OOM while defining a new condition
+
+
+
+* NOTE:
+
+Recursion for indicators and conditions work differently than rules.
+With rules, the cache is not always used (this is actually a bug).  
+Consequently, the rule is evaluated directly, and the cache is not used.
+Therefore, rules allow one extra level of recursion than do indicators
+and conditions.
+
+This should eventually be fixed.
+
+

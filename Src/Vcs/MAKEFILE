@@ -1,0 +1,52 @@
+##############################################################################
+## Makefile
+##
+## VCS - Version Control System
+##
+## This computer program is Copyright (c) Ward Quinlan, 1998
+##############################################################################
+
+NAME   = VCS
+MODEL  = S
+
+CC     = cl
+CFLAGS = -c -A$(MODEL)
+LINK   = link
+LFLAGS = /ST:8192
+
+!ifdef DEBUG
+CFLAGS = $(CFLAGS) -Zi -Od -DDEBUG=1
+LFLAGS = $(LFLAGS) /CO
+!endif
+
+.SUFFIXES: .C
+
+install: $(NAME).EXE
+    copy $(NAME).EXE $(DEVELOPMENT)\BIN
+
+*.C: *.H
+
+.C.OBJ:
+    $(CC) $(CFLAGS) $*.C
+
+$(NAME).LIB: VCSCORE.OBJ VCSLOG.OBJ VCSFILE.OBJ
+    -erase $(NAME).LIB
+    LIB $(NAME).LIB +VCSCORE.OBJ +VCSLOG.OBJ +VCSFILE.OBJ;
+
+$(NAME).EXE: VCSUI.OBJ $(NAME).LIB
+    $(LINK) @<<
+VCSUI.OBJ
+$(NAME).EXE
+NUL.MAP
+$(NAME).LIB $(MODEL)LIBCE
+NUL.DEF $(LFLAGS)
+;
+<<
+
+clean:
+    -erase *.OBJ
+    -erase *.EXE
+    -erase *.LIB
+
+clninst:
+    -erase $(DEVELOPMENT)\BIN\$(NAME).EXE

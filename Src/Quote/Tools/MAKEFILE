@@ -1,0 +1,53 @@
+##############################################################################
+## Makefile
+##
+## QT_UPD - Quote Update Tool
+##
+## This computer program is Copyright (c) Ward Quinlan, 1996, 1997
+##############################################################################
+
+MODEL  = L
+PROGNAMES = QT_UPD.EXE SLNK.EXE
+
+CC     = cl
+CFLAGS = -c -A$(MODEL)
+LINK   = link
+LFLAGS = /ST:8192
+LIBS   = $(MODEL)LIBCE
+
+!ifdef DEBUG
+CFLAGS = $(CFLAGS) -Zi -Od -DDEBUG=1
+LFLAGS = $(LFLAGS) /CO
+!endif
+
+!ifdef HASHTEST
+CFLAGS = $(CFLAGS) -DHASHTEST
+!endif
+
+.SUFFIXES: .C
+
+install: $(PROGNAMES)
+    -copy QT_UPD.EXE $(DEVELOPMENT)\BIN
+    -copy SLNK.EXE   $(DEVELOPMENT)\BIN
+
+.C.OBJ:
+    $(CC) $(CFLAGS) $*.C
+
+$(PROGNAMES): $*.OBJ
+    $(LINK) @<<
+$*.OBJ
+$*.EXE
+NUL.MAP
+$(LIBS)
+NUL.DEF $(LFLAGS)
+;
+<<
+
+clean:
+    -erase *.obj
+    -erase *.exe
+
+clninst:
+    -erase $(DEVELOPMENT)\BIN\QT_UPD.EXE
+    -erase $(DEVELOPMENT)\BIN\SLNK.EXE
+

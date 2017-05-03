@@ -1,0 +1,508 @@
+TODO - Next Release
+====
+
+
+1.  Branches currently are 'global'.  That is, a branch
+    applies to a current subdirectory, but it also
+    applies to all subdirectories.
+
+    This may not always be the best way to model source
+    code.  Consider STATPAK in Quote.  Say I were to
+    write a new application some day, which also uses
+    STATPAK.  Because STATPAK was originally written
+    for Quote, it's branch is probably called something
+    like 'Quote'.  Now, if I want to create a new
+    application, 'Portfolio', I am *forced* to create
+    a new branch for Statpak, if Portfolio uses Statpak.
+
+    In other words, a user of the statpak library
+    is forcing an entire new branch of statpak to
+    be created, even if no code within statpak
+    actually changes.
+
+    Another case is the following.
+
+    Suppose Quote is going along fine, but now all
+    of a suddent I want to, for some strange reason,
+    create a completely new branch of Quote.  I
+    can do this, but for it to work, I also
+    have to create completely new branches of the
+    following:
+
+    INDCTR
+    STATPAK
+    BOXCTRL
+    ...
+
+    So, to branch Quote off, I have to branch off
+    all of its subsystems, even if none of them change!
+    This clearly leaves something to be desired.
+
+    What I would like is to branch Quote off, but
+    specify that both Branches of Quote actually
+    share the same branch of its subsystems.
+
+    I think this can be achieved by simply applying
+    branches to every directory.
+
+    If a Label consisted of the following for
+    directories:
+
+
+        Branch, Label         --> The Label Header, as is done today
+
+        Target, Branch, Label --> The Label Record - note addition of Branch Name
+
+
+    
+    This strategy would come close to achieving what
+    I would like.
+
+    I would also have to remove the default branch name, VCSBRANCH,
+    as it would not really apply anymore.
+
+    Case Study
+    ==========
+
+    -Branches indicated in [braces]
+
+    Today
+    -----
+
+    QOBJSRC [Quote, Budget]
+    
+        QOBJECT [Quote, Budget]
+
+        QUOTE [Quote]
+
+        BUDGET [Budget]
+
+    This works.  Now, what if I want to create a new branch
+    of QUOTE, called QuoteBranchOff?  How do I use QOBJECT?
+    I can't.
+
+
+    Future
+    ------
+
+    QOBJSRC [Quote, Budget, QuoteBranchOff]
+    
+        QOBJECT [Quote, Budget]
+
+        QUOTE [Quote, QuoteBranchOff]
+
+        BUDGET [Budget]
+
+    This would actually work, because QOBJECT would just continue
+    to use the Quote branch.  QUOTE, however, would not be
+    forced to use Quote, and could use QuoteBranchOff.  Likewise,
+    QOBJSRC would also use QuoteBranchOff.
+
+
+2.  A copy label command might be useful, if feasible.  (Issue:
+    what about copying labels across a branch?  A label makes
+    the implicit assumption that all files within it belong
+    to the same branch as the label itself)
+    
+
+
+General Tests
+=============
+
+VCSROOT   
+-------
+
+.  Ensure that if VCSROOT is not defined, then an
+   exEnvironment exception is thrown
+   
+.  Ensure that if VCSROOT points to a non-existent
+   place, then this is reported appropriately
+
+
+VCSBRANCH 
+---------
+
+(see inline tests)
+
+
+VCSRPATH  
+--------
+
+.  Try several commands with different relative paths; a
+   minimum should be:
+   .  the VCSROOT (i.e., VCSRPATH empty)
+   .  VCSRPATH == .
+   .  VCSRPATH == 1 directory level
+   .  VCSRPATH == 2 directory levels
+   .  VCSRPATH == 3 directory levels
+
+
+Miscellaneous
+-------------
+
+.  Ensure that path lengths on various commands
+   cannot exceed _cbPathMax characters
+
+.  Ensure that various Ctrl-C sequences work,
+   including file copying - ensure that
+   files in VCSROOT are cleared up properly.
+   as well as local files
+
+.  Out of memory test
+
+.  Use CodeView to test vcs_set_readonly( )
+   when fSet is FALSE
+
+.  Make sure that file times seem to be OK
+
+.  Ensure that 2 versions, which are the same
+   version number, but in different branches,
+   are different.  See vcs_version_is_referenced( ),
+   vcs_label_is_referenced( ),
+   and comments in vcscore.c pages 22 and 23.
+
+.  Do a grep on stBefore, stDuring, and stAfter
+   Conduct appropriate tests on these to ensure
+   they seem to be working
+
+
+Command Tests
+=============
+
+
+init     
+----
+
+.  Ensure that you cannot create a label without first
+   performing a VCS INIT
+
+.  Ensure that you cannot perform other miscellaneous
+   commands without first performing a VCS INIT
+
+.  Ensure that you cannot perform a VCS INIT twice
+
+.  Ensure that VCS INIT creates an empty label file
+   in the VCSROOT directory
+
+
+mkdir    
+-----
+
+.  Ensure that you can create a directory
+
+.  Ensure that you cannot create a directory twice
+
+.  Ensure that creating a directory also creates
+   an empty label file
+
+.  Ensure that attempting to create a directory
+   on a read-only drive is handled
+
+
+rmdir    
+-----
+
+.  Ensure that you cannot remove a directory with files in it
+
+.  Ensure that you cannot remove a directory with at
+   least one label defined in it
+
+.  Ensure that you can remove an empty directory
+
+.  Ensure that you removing a physically empty directory
+   is managed somehow
+
+
+mkfile   
+------
+
+.  Ensure that you create a file which already exists
+
+.  Ensure that you can create a normal file
+
+
+rmfile   
+------
+
+.  Ensure that you cannot remove a file which does not exist
+
+.  Ensure that you can remove a regular file, with no versions
+
+.  Ensure that you cannot remove a file with any versions in it
+
+
+log      
+---
+
+.  Ensure that typing the log works
+
+
+dir      
+---
+
+.  Ensure that taking the directory a single file works
+
+.  Ensure that taking the directory of a directory works
+
+.  Ensure that taking a pattern-matching directory works
+
+.  Ensure that sorting is working
+
+
+mkver    
+-----
+
+.  Ensure that creating a version with a supplied branch works
+
+.  Ensure that creating a version with a default branch works
+
+.  Ensure syntax checks on the branch name:
+   .   Q.1.1.03 OK
+   .   .1.1.03  NO
+   .   _1       OK
+   .   11       NO
+   .   __       OK
+   .   ABCD     OK
+   .   a1       OK
+   .   abcdefghijklmnop  OK
+   .   abcdefghijklmnopq NO
+
+.  Ensure that trying to create a version which is already
+   unlocked fails
+
+
+lkver    
+-----
+
+.  Ensure that locking a version with a supplied branch works
+
+.  Ensure that locking a version with a default branch works
+
+.  Ensure that trying to lock a non-existent version fails
+
+.  Ensure that trying to lock a locked version fails
+
+.  Ensure that file copying works:
+   .  Size 0
+   .  Size 1
+   .  Size 2047
+   .  Size 2048
+   .  Size 2049
+   .  Size 4096
+   .  Size 4097
+   .  Size 1M
+
+
+lsver    
+-----
+
+.  Ensure that lsver for a non-existent file fails
+
+.  Ensure that lsver for an empty file works
+
+.  Ensure that lsver for a file with multiple versions works,
+   including multiple branches
+
+.  Ensure that output is sorted
+
+
+rmver    
+-----
+
+.  Ensure that you cannot remove a version referenced within a label
+
+.  Ensure that if you remove a version:
+   .   The local file is sync'ed if the local file is read-only
+   .   The local file is not sync'ed if the local file is read-write
+
+.  Ensure that you cannot remove a version which does not exist 
+   (both no version # and no branch)
+
+.  Ensure that removing a version with a supplied branch name works
+
+.  Ensure that removing a version with a default branch name works
+
+.  Ensure that the version number shows up in the message
+
+
+mklab    
+-----
+
+.  Ensure that you cannot create a label twice
+
+.  Ensure that creating a valid label works
+
+.  Ensure that if you try to create a label with
+   no label file, this is managed
+
+.  Ensure that you cannot create a label with an invalid
+   name (e.g. .3)
+
+.  Ensure you can create a label with a supplied branch
+
+.  Ensure that you can create a label with a default branch
+
+
+rmlab    
+-----
+
+.  Ensure that you can remove a label
+
+.  Ensure that you cannot remove a label which is not empty
+   .  1 file, and:
+   .  1 directory
+
+.  Ensure that you cannot remove a label which is referenced
+   in a parent directory
+
+.  Ensure that you can remove a label which is referenced
+   in a parent directory, provided that the current directory
+   is '\\'
+
+
+label    
+-----
+
+.  Ensure that you can add a single file to a label
+
+.  Ensure that you can add a single directory to a label
+
+.  Ensure that you can add multiple files, with the same version,
+   to a label (not version 0)
+
+.  Ensure that you can add multiple files, with the same version,
+   to a label (version 0), and that the latest versions are added
+
+.  Ensure that you can add multiple directories, with the same label,
+   to a label
+
+.  Ensure that you can't add a combination of files and directories
+   to a label
+
+.  Ensure that you can add a file which already exists in a label,
+   provided that the version is the same
+
+.  Ensure that you can add a directory which already exists in a label,
+   provided that the labe is the same
+
+.  Repeat the above two test cases, with a different version/label
+   respectively.  Exceptions should be thrown.
+
+.  Ensure that you cannot add a file to a label, for a version
+   which does not exist
+
+.  Ensure that you cannot add a directory to a label, for a label 
+   which does not exist
+
+.  Ensure that supplied branches work
+
+.  Ensure that default branches work
+
+.  Ensure that you can add something to a label '2 layers deep'
+
+.  Ensure that you can't add a label referencing a sub-directory,
+   if the label for that sub-directory does not exist
+
+
+lslab (1) - All Labels
+-----
+
+.  Ensure that you can list labels, and that they are sorted
+
+
+lslab (2) - Individual Labels
+-----
+
+.  Ensure that you can list the contents of a label, and that
+   it is sorted
+
+.  Ensure that supplied branches work
+
+.  Ensure that default branches work
+
+
+getfile  
+-------
+
+.  Ensure that you can get a file, with no local file existing
+
+.  Ensure that you can get a file, with a r/o local file existing
+
+.  Ensure that you cannot get a file, with a r/w local file existing
+
+.  Ensure that you can get a file in some sub-directory
+
+.  Ensure that you can get a bunch of files
+
+.  Ensure that supplied branches work
+
+.  Ensure that default branches work
+
+.  Ensure that if the local file matches in terms of size, date, and
+   time, a physical copy is not actually performed
+
+.  Ensure that some file copies work
+
+
+getlab   
+------
+
+.  Ensure that you can get a label consisting of files
+
+.  Ensure that you can get a label consisting of sub-directories
+   (at least 2)
+
+.  Repeat with one at least 3 directories deep
+
+.  Ensure that supplied branches work
+
+.  Ensure that default branches work
+
+.  Ensure that if the directory does not exist, it is automatically created
+
+.  Ensure that if a directory does exist, the command still works
+
+
+hdfile   
+------
+
+.  Ensure that you can hide a file, with no local file existing
+
+.  Ensure that you can hide a file, with a r/o local file existing
+
+.  Ensure that you cannot hide a local, r/w file
+
+.  Ensure that you can hide a file in some sub-directory
+
+.  Ensure that you can hide a bunch of files, and a bunch
+   of subdirectories (at least 2)
+
+
+hdlab    
+-----
+
+.  Ensure that you can hide a label consisting of files
+
+.  Ensure that you can hide a label consisting of sub-directories
+
+.  Ensure that you can hide at least 3 directories deep
+
+.  Ensure that supplied branches work
+
+.  Ensure that default branches work
+
+.  Ensure that if a directory does not exist, this is managed somehow
+
+
+purge    
+-----
+
+.  Ensure that you can purge the log file
+
+.  If the log file does not exist, ensure that this is still managed
+
+
+help     
+----
+
+.  Ensure that the help system matches reality

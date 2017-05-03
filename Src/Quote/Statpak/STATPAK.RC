@@ -1,0 +1,54 @@
+//////////////////////////////////////////////////////////////////////////////
+// STATPAK.RC
+//
+// Statistics and memory management tool functions for use with the
+// Quote package - resources.
+//
+// Copyright (c) Ward Quinlan, 1996
+//
+//////////////////////////////////////////////////////////////////////////////
+#include <windows.h>
+#include "resource.h"
+
+IDD_PERIODDLGPROC DIALOG 8, 8, 144, 48
+STYLE DS_MODALFRAME | WS_POPUP | WS_VISIBLE | WS_CAPTION | WS_SYSMENU
+CAPTION "Indicator Period"
+FONT 8, "MS Sans Serif"
+BEGIN
+    LTEXT           "Period:",  -1, 8, 8, 32, 8
+    EDITTEXT        IDC_PERIOD, 48, 8, 32, 12, ES_AUTOHSCROLL
+    PUSHBUTTON      "C&lose", IDCANCEL, 96, 8, 40, 14
+    PUSHBUTTON      "&Update", IDOK, 96, 24, 40, 14
+END
+
+IDD_PERIOD2DLGPROC DIALOG 8, 8, 144, 48
+STYLE DS_MODALFRAME | WS_POPUP | WS_VISIBLE | WS_CAPTION | WS_SYSMENU
+CAPTION "Options2"
+FONT 8, "MS Sans Serif"
+BEGIN
+    LTEXT           "Period:",          -1,  8,  8, 32,  8
+    EDITTEXT                    IDC_PERIOD, 48,  8, 32, 12, ES_AUTOHSCROLL
+    LTEXT           "Param1:",          -1,  8, 24, 32,  8
+    EDITTEXT                   IDC_PERIOD2, 48, 24, 32, 12, ES_AUTOHSCROLL
+
+    PUSHBUTTON      "C&lose",     IDCANCEL, 96,  8, 40, 14
+    PUSHBUTTON      "&Update",        IDOK, 96, 24, 40, 14
+END
+
+IDD_PERIOD3DLGPROC DIALOG 8, 8, 144, 64
+STYLE DS_MODALFRAME | WS_POPUP | WS_VISIBLE | WS_CAPTION | WS_SYSMENU
+CAPTION "Options3"
+FONT 8, "MS Sans Serif"
+BEGIN
+    LTEXT           "Period:",          -1,  8,  8, 32,  8
+    EDITTEXT                    IDC_PERIOD, 48,  8, 32, 12, ES_AUTOHSCROLL
+    LTEXT           "Param1:",          -1,  8, 24, 32,  8
+    EDITTEXT                   IDC_PERIOD2, 48, 24, 32, 12, ES_AUTOHSCROLL
+    LTEXT           "Param2:",          -1,  8, 40, 32,  8
+    EDITTEXT                   IDC_PERIOD3, 48, 40, 32, 12, ES_AUTOHSCROLL
+
+    PUSHBUTTON      "C&lose",     IDCANCEL, 96,  8, 40, 14
+    PUSHBUTTON      "&Update",        IDOK, 96, 24, 40, 14
+END
+
+

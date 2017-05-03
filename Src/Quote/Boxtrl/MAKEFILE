@@ -1,0 +1,82 @@
+#############################################################################
+# BoxCtrl Makefile (C600)                                                   #
+#                                                                           #
+# Options:                                                                  #
+#                                                                           #
+# DEBUG=Y Compiles a DEBUG Version                                          #
+#                                                                           #
+#############################################################################
+
+!ifndef MODEL
+MODEL    = M
+!endif
+
+PROGNAME = BOXCTRL
+
+CC       = cl
+CFLAGS   = -c -A$(MODEL)w -G2sw -Zp -W3 -nologo
+
+LINK     = link
+LFLAGS   = /NOD /NOE
+
+RC       = rc
+
+!ifdef DEBUG
+CFLAGS   = $(CFLAGS) -Z7 -Od -Yd -DDEBUG=1
+LFLAGS   = $(LFLAGS) /CO /LI
+RC       = $(RC) -DDEBUG
+!endif
+
+LIBS     = $(MODEL)DLLCEW LIBW
+OBJS     = $(PROGNAME).OBJ
+
+#############################################################################
+# Inference Rules                                                           #
+#############################################################################
+
+.SUFFIXES: .C .RC
+
+.C.OBJ:
+    $(CC) $(CFLAGS) $*.C
+
+#############################################################################
+# Executable Section                                                        #
+#############################################################################
+
+install: $(PROGNAME).DLL
+    -copy $(PROGNAME).LIB $(DEVELOPMENT)\LIB
+    -copy $(PROGNAME).DLL $(DEVELOPMENT)\BIN
+    -copy $(PROGNAME).H   $(DEVELOPMENT)\INC
+
+#############################################################################
+# Linking Section                                                           #
+#############################################################################
+
+$(PROGNAME).DLL: $(OBJS) $(PROGNAME).DEF
+    $(LINK) @<<
+    $(OBJS)
+    $*.DLL
+    $*.MAP
+    $(LIBS)
+    $*.DEF $(LFLAGS)
+<<
+    $(RC) $(PROGNAME).DLL
+    implib $*.LIB $*.DEF
+
+#############################################################################
+# Include File Dependencies                                                 #
+#############################################################################
+
+*.C: $*.H
+
+clean:
+    -erase $(PROGNAME).DLL
+    -erase $(PROGNAME).LIB
+    -erase $(PROGNAME).MAP
+    -erase *.OBJ
+
+clninst:
+    -erase $(DEVELOPMENT)\LIB\$(PROGNAME).LIB
+    -erase $(DEVELOPMENT)\BIN\$(PROGNAME).DLL
+    -erase $(DEVELOPMENT)\INC\$(PROGNAME).H
+#############################################################################

@@ -1,0 +1,14 @@
+;#######################################
+;# Quote Definitions File             #
+;#######################################
+
+NAME         QUOTE
+DESCRIPTION  'Quote Windows Application'
+EXETYPE      WINDOWS
+
+CODE         PRELOAD MOVEABLE DISCARDABLE
+DATA         PRELOAD MOVEABLE MULTIPLE
+
+HEAPSIZE     1024   ; initial heap size
+
+

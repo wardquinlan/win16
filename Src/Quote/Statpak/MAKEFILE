@@ -1,0 +1,94 @@
+##############################################################################
+# MAKEFILE
+#                                                                           
+# Makefile for the statpak library
+#
+# Options:                                                                  
+#                                                                           
+# DEBUG=Y Compiles a DEBUG Version                                          
+#
+# Copyright (c) Ward Quinlan, 1996
+#                                                                           
+##############################################################################
+!ifndef MODEL
+MODEL    = M
+!endif
+
+PROGNAME = STATPAK
+
+CC       = cl
+CFLAGS   = -c -A$(MODEL)w -G2sw -Zp -W3 -nologo
+
+LINK     = link
+LFLAGS   = /NOD /NOE
+
+RC       = rc
+
+!ifdef DEBUG
+CFLAGS   = $(CFLAGS) -Z7 -Od -Yd -DDEBUG=1
+LFLAGS   = $(LFLAGS) /CO /LI
+RC       = $(RC) -DDEBUG
+!endif
+
+LIBS     = $(MODEL)DLLCEW LIBW
+OBJS     = STATPAK.OBJ
+
+##############################################################################
+# Inference Rules
+#
+##############################################################################
+
+.SUFFIXES: .C .RC
+
+.C.OBJ:
+    $(CC) $(CFLAGS) $*.C
+
+.RC.RES:
+    $(RC) -r $*.RC $*.RES
+
+##############################################################################
+# Executable Section
+#
+##############################################################################
+
+install: $(PROGNAME).DLL
+    -copy $(PROGNAME).DLL $(DEVELOPMENT)\BIN
+    -copy $(PROGNAME).H   $(DEVELOPMENT)\INC
+    -copy $(PROGNAME).LIB $(DEVELOPMENT)\LIB
+
+##############################################################################
+# Linking Section
+#
+##############################################################################
+
+$(PROGNAME).DLL: $(OBJS) $(PROGNAME).DEF $(PROGNAME).RES
+    $(LINK) @<<
+    $(OBJS)
+    $*.DLL
+    $*.MAP
+    $(LIBS)
+    $*.DEF $(LFLAGS)
+<<
+    $(RC) $*.RES $*.DLL
+    implib $*.LIB $*.DEF
+
+##############################################################################
+# Include File Dependencies
+#
+##############################################################################
+
+*.C: $*.H
+
+clninst:
+    -erase $(DEVELOPMENT)\BIN\$(PROGNAME).DLL
+    -erase $(DEVELOPMENT)\INC\$(PROGNAME).H
+    -erase $(DEVELOPMENT)\LIB\$(PROGNAME).LIB
+     
+clean:
+    -erase $(PROGNAME).DLL
+    -erase $(PROGNAME).MAP
+    -erase $(PROGNAME).LIB
+    -erase *.OBJ
+    -erase *.RES
+
+##############################################################################

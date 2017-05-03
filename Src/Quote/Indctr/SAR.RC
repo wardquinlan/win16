@@ -1,0 +1,25 @@
+//////////////////////////////////////////////////////////////////////////////
+// SAR.RC
+//
+// SAR resources
+//
+// This is for use with the Quote package.
+// Copyright (c) Ward Quinlan, 1996
+//////////////////////////////////////////////////////////////////////////////
+#include <windows.h>
+#include "sar.hxx"
+
+IDD_SAR DIALOG 8, 8, 144, 64
+STYLE DS_MODALFRAME | WS_POPUP | WS_VISIBLE | WS_CAPTION | WS_SYSMENU
+CAPTION "SAR Options"
+FONT 8, "MS Sans Serif"
+BEGIN
+    LTEXT           "Acceleration",     -1, 8,  8, 64,  8
+    EDITTEXT        IDC_ACCEL,              8, 16, 64, 12, ES_AUTOHSCROLL
+
+    LTEXT           "Max Acceleration", -1, 8, 32, 64,  8
+    EDITTEXT        IDC_ACCELMAX,           8, 40, 64, 12, ES_AUTOHSCROLL
+
+    PUSHBUTTON      "C&lose",     IDCANCEL, 96,  8, 40, 14
+    PUSHBUTTON      "&Update",        IDOK, 96, 24, 40, 14
+END

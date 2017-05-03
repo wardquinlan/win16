@@ -1,0 +1,145 @@
+#############################################################################
+# Quote Makefile                                                            #
+#                                                                           #
+# Options:                                                                  #
+#                                                                           #
+# DEBUG     Compiles a DEBUG Version                                        #
+# T_TX      Compiles a short TEXT Version                                   #
+# T_LM      Compiles a low memory Version                                   #
+# T_BG      Compiles a fast background Version                              #
+# MODEL = M Compiles a medium-model Version                                 #
+# MODEL = L Compiles a large-model Version (default)                        #
+#                                                                           #
+#############################################################################
+
+!ifndef MODEL
+MODEL    = L
+!endif
+
+!if ( "$(MODEL)" == "L" )
+
+FDATA  = 1
+
+!else
+	
+!if ( "$(MODEL)" == "M" )
+
+FDATA  = 0
+
+!else
+
+!error Build: MODEL must be L or M.    
+
+!endif
+
+!endif
+
+PROGNAME = QUOTE
+CC       = cl
+LINK     = link
+RC       = rc
+	 
+CFLAGS   = -c -G2sw -Zp -W3 -A$(MODEL) -nologo -Yuqobject.hxx -DFDATA=$(FDATA)
+LFLAGS   = /STACK:14336 /ALIGN:16 /NOD /NOE /ONERROR:NOEXE /PACKC:61440
+LIBS     = $(MODEL)LIBCEW LIBW COMMDLG BOXCTRL STATPAK
+
+QOBJECT  = $(MODEL)QOBJ
+
+!ifdef DEBUG
+CFLAGS   = $(CFLAGS) -Od -Z7 -Yd -DDEBUG=1
+LFLAGS   = $(LFLAGS) /CODEVIEW
+RC       = $(RC) -DDEBUG=1
+QOBJECT  = $(QOBJECT)D
+!endif
+
+!ifdef T_TX
+CFLAGS   = $(CFLAGS) -DT_TX
+!endif
+
+!ifdef T_LM
+CFLAGS   = $(CFLAGS) -DT_LM
+!endif
+
+!ifdef T_BG
+CFLAGS   = $(CFLAGS) -DT_BG
+!endif
+
+LIBS     = $(QOBJECT) $(LIBS)
+OBJS     = QUOTE.OBJ DLG.OBJ TEMPLATE.OBJ TOOLS.OBJ DOC.OBJ VIEW.OBJ RPT.OBJ SCRVIEW.OBJ TEXTVIEW.OBJ \
+		   TRDVIEW.OBJ PERFENG.OBJ WORD.OBJ PERFSUM.OBJ PARSER.OBJ SIMENG.OBJ
+
+#############################################################################
+# Inference Rules                                                           #
+#############################################################################
+
+.SUFFIXES: .CPP
+
+.CPP.OBJ:
+	$(CC) $(CFLAGS) $*.CPP
+
+#############################################################################
+# Executable Section                                                        #
+#############################################################################
+
+install: $(DEVELOPMENT)\BIN\$(PROGNAME).EXE
+	
+$(DEVELOPMENT)\BIN\$(PROGNAME).EXE: $(PROGNAME).EXE
+	-copy $(PROGNAME).EXE $(DEVELOPMENT)\BIN
+
+$(PROGNAME).EXE: QOBJECT.PCH RESOURCE.HXX OT.HXX
+
+#############################################################################
+# Linking Section                                                           #
+#############################################################################
+
+$(PROGNAME).exe: $(OBJS) $(PROGNAME).def $(PROGNAME).res $(DEVELOPMENT)\LIB\$(QOBJECT).LIB
+	$(LINK) @<<
+$(OBJS)
+$(PROGNAME).EXE
+$(PROGNAME).MAP
+$(LIBS)
+$(PROGNAME).DEF $(LFLAGS)
+;
+<<
+	$(RC) -K $(PROGNAME).RES $(PROGNAME).EXE
+
+#############################################################################
+# Resources Section                                                         #
+#############################################################################
+
+$(PROGNAME).RES: $(PROGNAME).RC *.BMP *.ICO
+	$(RC) -r $(PROGNAME).RC
+
+$(PROGNAME).RC: RESOURCE.HXX
+
+#############################################################################
+# Include File Dependencies                                                 #
+#############################################################################
+
+QOBJECT.PCH: $(DEVELOPMENT)\INC\QOBJECT.HXX
+	$(CC) $(CFLAGS) /Ycqobject.hxx stdwin.cpp
+
+*.CPP: *.HXX
+
+## More specialized dependancies
+
+#Note: you must use decimal here !!
+resource.hxx: resource.r
+	led -p -q -l100 < resource.r > resource.hxx "#define $$0 $$line"
+
+ot.hxx: ot.r
+	led -p -q -l4096 < ot.r > ot.hxx "#define $$0 0x$$hline"
+
+clean:
+	-erase $(PROGNAME).exe
+	-erase $(PROGNAME).res
+	-erase QOBJECT.PCH
+	-erase $(PROGNAME).map
+	-erase *.obj     
+	-erase resource.hxx
+	-erase ot.hxx
+	
+clninst:
+	-erase $(DEVELOPMENT)\BIN\$(PROGNAME).EXE
+
+#############################################################################

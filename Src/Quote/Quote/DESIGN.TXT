@@ -1,0 +1,914 @@
+                      New Charting Design Notes        April 11, 1996
+                      =========================
+
+
+Name: Quote
+
+
+                         1. Requirements
+                         ================
+
+Following are the requirements for the new charting program.
+
+R1  The program must provide support to display hi-lo-close-volume
+    charts on a single display.
+R2  The program must support user-definable indicators which
+    can be contained on their own set of axes, or superimposed
+    on a hi-lo-close-volume axis.
+R3  The program must be able to read and write text files.
+R4  The program must be able to draw vertical lines.  While tracking
+    these vertical lines, the program must display the hi, lo, cl,
+    and volume somewhere else on the window.  These will be updated
+    automatically as the line moves.
+
+
+
+                        2. Future Requirements
+                        =====================
+
+Following are requirements anticipated in the intermediate-term future:
+
+FR1  The program, or tool, must be able to merge existing
+     charts with new quotes, for the purposes of downloading.
+FR2  The program must be able to draw trendlines.
+FR3  The program must support linear regression.
+FR4  The program must support sample correlation.
+
+
+                         3. High-Level Design
+                         ====================
+
+3.1 Overview
+============
+
+The program will support the viewing and printing of chart files.
+In addition, a user may define their own indicator in an 'indicator
+library' (DLL) which can then be loaded dynamically onto charts.
+
+3.2 Views
+=========
+
+There will only be one type of window: chart window.
+Chart windows provide up to 4 'views' (sets of axes) displaying different 
+aspects of the chart.  This may include hi-lo-close-volume charts, 
+different indicators, or any combination of these.
+
+The 4 sets of axes will be labelled 'A', 'B', 'C', 'D'.  Diagram 1
+depicts an example of this.
+
+
+                +----------------------------------------+
+                |                                        |
+                | 'A' - contains main chart and 2        |
+                | moving averages                        |
+                |                                        |
+                +----------------------------------------+
+                |                                        |
+                | 'B' - contains an RSI indicator        |
+                |                                        |
+                |                                        |
+                +----------------------------------------+
+                |                                        |
+                | 'C' - contains 2 other indicators      |
+                |                                        |
+                |                                        |
+                +----------------------------------------+
+                |                                        |
+                | 'D' - not used                         |
+                |                                        |
+                |                                        |
+                +----------------------------------------+
+                              Diagram 1.
+
+
+3.3 Templates
+=============
+
+In order to facilitate this model, a user defines a 'window layout'
+which contains the information needed to define what chart windows
+will look like.  For example, in Diagram 1 a window layout has been
+defined in which view 'A' contains the chart as well as 2 moving averages,
+view 'B' contains an RSI indicator, view 'C' contains 2 other indicators
+superimposed on the same set of axes, and view 'D' is unused.
+
+Consider Diagram 1, view 'A'.  The two moving averages are likely
+the same moving average with different parameters.  For example, 
+the first moving average might be one with period 18, the second,
+with period 40.  To facilitate this concept, the user must also
+define a 'indicator template', which contains a pointer to the indicator
+library, as well as some data describing all data for that indicator.
+One can think of an indicator template as an 'instance' of an indicator.
+
+Template serialization is done using a template file, not the regular
+user data file.  Template serialization will include the serialization of:
+
+-Window Layouts
+-Indicator Templates (including indicator-specific options)
+-General user-definable parameters, namely:
+    -Fonts - This is general!
+    -General color attributes (see color dialog discussion below)
+    -Data period (i.e., daily data, weekly data, or monthly data)
+    
+Template serialization will be fully automatic, and will be more or
+less invisible to the user.
+
+3.4 Modular Components
+======================
+
+Main
+   -Contains WinMain( ) and the main WndProc( ) routines.
+Paint
+   -Contans display code for both the printer and video
+    displays.
+Stats
+   -Contains common statistical routines, including:
+       -Simple, weighted, and exponential moving average routines.
+       -Sample-mean and -standard-deviation routines.
+       -A Sample-correlation routine.
+Dlg
+    -Contains the dialog box routines
+Doc
+    -Contains the document data structure routines, including serialization.
+Template
+    -Contains the window layout and indicator template data structures
+     and code, including serialization.  This module will also serialize
+     any other standard options, such as fonts.
+    Note: Template data will be stored in 'template documents', not
+          chart documents.
+
+3.5 Menu Structure
+==================
+
+The following menu structure is anticipated:
+
+File
+    New*+
+    Open*+
+    Save*+ 
+    Save As*+
+    SEPARATOR
+    Exit*
+Chart
+    Add Quote*+
+    Delete Quote
+Options
+    Font Size*+
+    Color*+
+    Line Width*+
+    SEPARATOR
+    Data Period
+        Daily
+        Weekly
+        Monthly
+    Text File Format
+    SEPARATOR
+    Show(Hide) Quote Box
+    Show(Hide) Tracker
+Template
+    Define Indicator Template
+    Undefine Indicator Template
+    Define Window Layout
+    Undefine Window Layout
+Window
+    Cascade
+    Tile
+    Arrange Icons
+    SEPARATOR
+    New Window*+
+    SEPARATOR
+    (1 entry for every window viewed)
+About
+
+Menu items with a askerisk (*) will have a corresponding tool bar button.
+Menu items with a plus (+) will have a corresponding accelerator sequence.
+
+3.6 Dialog Box Structure
+========================
+
+3.6.1 General Discussion
+
+    The following menu commands will be 'immediate' commands and no
+    dialog box is necessary:
+
+    File
+        New
+        Save
+        Exit
+    Window
+        Cascade
+        Tile
+        Arrange Icons
+    About   
+
+    The following menu commands will use common dialog box routines:
+
+    File
+        Open
+        Save As
+        
+3.6.1 Add Quote Dialog
+
+    The add quote dialog will contain the following controls:
+
+    -Date   (edit box)
+    -Hi     (edit box)
+    -Lo     (edit box)
+    -Close  (edit box)
+    -Volume (edit box)
+    -Add    (push button)
+    -Close  (push botton)
+
+3.6.2 Delete Quote Dialog
+
+    The delete quote dialog will contain the following controls:
+
+    -Date   (edit box)
+    -Delete (push button)
+    -Close  (push button)
+
+3.6.3 Font Size Dialog
+
+     The font size dialog is used to specify the font size
+     on displays.
+
+     The dialog will have the following controls:
+
+     -Font Size             (editbox)
+     -Ok                    (pushbutton)
+     -Cancel                (pushbutton)
+
+3.6.4 Color Dialog
+
+     The color dialog is used to specify colors for certain common
+     attributes.  This does not include colors for indicators, which
+     may be defined in the window layout dialog.
+
+     The color dialog will have the following controls:
+
+     -Attribute Name        (list box)
+     -Color                 (list box)
+     -Update                (pushbutton)
+     -Close                 (pushbutton)
+
+     Attribute names are:
+
+     -Window backgrounds
+     -Text
+     -Hi-lo-close Bar chart
+     -Hi-lo-close Volume chart
+     
+3.6.5 Define Indicator Template Dialog
+
+    The define indicator template dialog will contain the following controls:
+
+    -Text Name              (combo box)
+    -Indicator Library Path (edit box)
+    -Color                  (list box)
+    -Graph Type (Line|Bar)  (Radio Button)
+    -Indicator Options      (pushbutton)
+    -Define                 (pushbutton)
+    -Close                  (pushbutton)
+
+    The indicator options is used to specify which indicator-specific
+    options the user wishes to choose.
+
+    The define indicator template dialog will be used to both define and
+    modify indicator templates.  The indicator name combo box will be
+    used to make the distinction between the two.
+
+3.6.6 Undefine Indicator Template Dialog
+
+    The undefine indicator template dialog will contain the following controls:
+
+    -Indicator Name (combo box)
+    -Undefine       (pushbutton)
+    -Close          (pushbutton)
+
+3.6.7 Define Window Layout Dialog
+
+    The define window layout dialog will contain the following controls:
+
+    -Text Name                         (combo box)
+    -Indicators Excluded               (list box)
+    -Indicators Included               (list box)
+    -Exclude Button                    (pushbutton)
+    -Include Button                    (pushbutton)
+    -Show Hi-Lo-Cl                     (checkbox)
+    -Set as default layout             (checkbox)
+    -View: A, B, C, D                  (radio button)
+    -Define                            (pushbutton)
+    -Close                             (pushbutton)
+    -Horizontal gridlines              (check box)
+    -Arithmetic/Logarithmic scaling    (radio button)
+    -Number of grids on a graph        (editbox)
+    -Percentage of space (real-estate) (editbox)
+    -DX Increment                      (editbox)
+    -Set as Default                    (checkbutton)
+    
+    The define window layout dialog will be used to both define and modify
+    window layouts.  The distinction may be made using the text name
+    combo box.
+    
+    Diagram 2 depicts the anticipated dialog box:
+
+
+    +-------------------------------------------------+
+    | Layout Name    ________                  CLOSE  |
+    | DX Increment   ________                         |
+    | Set As Default X                         DEFINE |
+    |                                                 |
+    |+View------------------------------------------+ |
+    ||      View Title ____________                 | |
+    ||                                              | |
+    ||    +------+        +------+    +View--+      | |
+    ||    |      |        |      |    |      |      | |
+    ||    |      |   <<<  |      |    | ( ) A|      | |
+    ||    |      |        |      |    |      |      | |
+    ||    |      |   >>>  |      |    | ( ) B|      | |
+    ||    |      |        |      |    |      |      | |
+    ||    +------+        +------+    | ( ) C|      | |
+    ||    Exlude          Include     |      |      | |
+    ||                                | ( ) D|      | |
+    ||                                |      |      | |
+    ||                                +------+      | |
+    ||                                              | |
+    ||                                +Scaling---+  | |
+    ||                                |          |  | |
+    ||X Show Hi-Lo-Close              | ( ) Arith|  | |
+    ||X Horizontal Gridlines          | ( ) Log  |  | |
+    ||                                +----------+  | |
+    ||                                              | |
+    ||Grids per Graph  _____________                | |
+    ||Percentage Space _____________                | |
+    |+----------------------------------------------+ |
+    +-------------------------------------------------+
+                 Diagram 2.
+
+
+3.6.8 Undefine Window Layout Dialog
+
+    The undefine window layout dialog will contain the following controls:
+
+    -Window Layout Name (combo box)
+    -Undefine           (pushbutton)
+    -Close              (pushbutton)
+
+3.6.9 New Window Dialog
+
+    The new window dialog will contain the following controls:
+
+    -Window Layout Name (combox box - defaults to the default layout)
+    -New Chart          (pushbutton)
+    -Close              (pushbutton)
+
+3.6.10 Line Width Dialog
+
+    The line width dialog will contain the following controls:
+
+    -Line Width         (editbox)
+    -OK                 (pushbutton)
+    -Cancel             (pushbutton)
+
+3.6.11 Text File Format Dialog
+
+    The text file format dialog will contain the following controls:
+
+    -Load String         (editbox)
+    -Load Delimiters     (editbox)
+    -Save String         (editbox)
+    -First Line is Title (checkbox)
+    -OK                  (pushbutton)
+    -Cancel              (pushbutton)
+
+    Load and save strings will have the following properties:
+
+    $H - the high
+    $L - the low
+    $C - the close
+    $V - the volume
+    $T - tab character
+
+    For example, a save string might look like:
+
+    $H, $L, $C, $V
+
+    A load string might look like:
+
+    $H$L$C$V
+    
+    with delimiters:
+
+    $B$T,
+    
+    If *any* of the delimiter characters are encountered in the text file,
+    the character is considered a delimiter.  
+    
+    In all cases, the carriage-return character is implicit.
+
+3.7 QuickSource Architecture
+
+    The main program will be stored in a standard QuickSource
+    project.  Each indicator library will further be stored
+    in its *own* quicksource project.  Once the indicator
+    library is compiled and checked in, it will be copied
+    to a common DLL directory, in this case c:\dev\dll.
+
+3.8 Project Build
+
+    The program will use the QObject class library.  The anticipated
+    version is 1.4.02.  The program will be compiled in the medium
+    memory model.  The program will be compiled with 2-byte packing
+    on structure boundaries.
+
+3.9 Command-Line Parameters
+
+    There is only one command line parameter: the template name.  If
+    no template is specified, a default template will be used,
+    DEFAULT.TPL, in the current directory.
+    
+3.10 Memory Management
+
+    Memory will be allocated using the standard new operator.  However,
+    when allocating memory to be passed between Quote and the indicator
+    libraries, all memory will be allocated with GlobalAlloc.
+
+3.11 Error Handling
+
+    Quote error handling will be done in a conventional fashion.
+    Error strings will be stored in a resource string table.
+
+    Indicator libraries will handle errors by reporting them
+    direcly to the user, then returning FALSE to the routine
+    which has been called.
+
+3.12 Read-Only Mode
+
+    The program will support a read-only mode, supported through a
+    compile switch.  The intent of this is to provide support for
+    a demo version of the program.
+
+3.13 Box Controls
+
+    The program will make use of the 'Box Control' child window controls.
+    
+3.14 Termination
+
+    Upon termination, the program shall:
+    o  Ask you if you want to save your document, if changes were made.
+    o  Ask you if you want to save your settings (template), if changes
+       were made.
+
+3.15 DataSets
+
+    Datasets will be used extensively throughout the program, and
+    so are warranted further discussion.  The dataset data structure
+    will be as follows:
+
+    typedef struct tagDATASET
+        {
+        WORD       nPoints;                 // number of data points
+        WORD       nOffset;                 // offset of first point
+        float FAR *lpnum;                   // data
+        } DATASET, FAR *LPDATASET;
+
+    Datasets will be allocated with GlobalAlloc( ) and GlobalFree( )
+    calls.  The data will be stored in lpnum.  the number of points
+    stored in lpnum will be captured in nPoints.  The offset of the 
+    first point will be in nOffset.
+
+    The nOffset parameter is used when a dataset does not start at
+    offset 0.  Consider a moving average.  Suppose there you have
+    100 points and you want to take a moving average.  The Close
+    dataset will be captured as:
+
+    nPoints = 100
+    nOffset = 0
+    lpnum   = {address of index 0 of close data}
+
+    To take a 10-period moving average, the dataset will look like
+    this:
+
+    nPoints = 91
+    nOffset = 9
+    lpnum   = {address of moving average data}
+
+    An offset of '9' means that M.A. lpnum[0] corresponds to
+    Close Data lpnum[9].
+
+    Close Data:
+    0  1  2  3  4  5  6  7  8  9  10  11  12 ...  98  99 
+    x  x  x  x  x  x  x  x  x  x   x   x   x       x   x
+
+    Moving Average Data 'lines up' like this:
+    0  1  2  3  4  5  6  7  8  9  10  11  12 ...  98  99
+    -  -  -  -  -  -  -  -  -  x   x   x   x       x   x
+
+    The moving average data would be actually stored like this:
+    0  1  2  3  4  5  6  7  8  9  10  11  12 ...  89  90
+    x  x  x  x  x  x  x  x  x  x   x   x   x       x   x
+    
+    Note the number of Moving Average points:
+
+    99 - 9 + 1 = 91, or
+    90 - 0 + 1 = 91
+
+    When are datasets used?  Datasets will be used:
+
+    o  As a means of communicating between Quote and the indicator
+       library.
+
+    When are datasets updated:
+
+    o  After a file is loaded, *all* datasets are updated.
+    o  After a user enters data, *all* datasets are updated.
+
+    Note that datasets will no longer be used in conjunction with the
+    tracker/quote box.
+
+3.16 Tracking/quote box
+
+    To incorporate the tracker/quote box, a 'lazy update' algorithm will
+    be used.  As the user moves the mouse, a background task will be
+    called to update statistics.  When these statistics accurlately
+    reflect the quote box, UpdateWindow( ) will be called.
+
+    Note that this method allows us to:
+
+    o  Calculate the mouse position.
+    o  From the mouse position, figure out the number of quotes
+       we have to loop through.
+    o  Start looping through (say 10 at a time) in the background.
+    o  Once we're done, call UpdateWindow( ) on the quote box.
+   
+    An even more effecient algorithm would calculate the 'delta' between
+    the two points of the mouse move, and move the internal counter
+    by this amount.
+
+
+                         4.  Detailed Design
+                         ===================
+                         
+4.1 Templates: Major Data Declarations and Classes
+==================================================
+
+    const UINT _cViewLayouts = 4;
+
+    enum GraphType   { gtLine, gtBar };
+    enum ScalingType { stArithmetic, stLogarithmic };
+    enum PeriodType  { ptDaily, ptWeekly, ptMonthly };
+
+    class QGeneralOptions : public QObject
+        {
+        PeriodType m_pt;                    // period type
+        USHORT     m_dyFont;                // height of the font
+        BOOL       m_fQuoteBox;             // T if quote box displayed
+        BOOL       m_fTracker;              // T if tracker displayed
+        };
+    
+    // This class supports list manipulation of indicator names.  This
+    // class is for use by QIndicatorDictionary.
+    class QIndicatorName : public QListObject
+        {
+    public:
+        QString m_sName;                    // text name of indicator
+        
+    private:
+        };
+
+    // Indicator name dictionary class.  This is for use by
+    // the view layouts.
+    class QIndicatorDictionary : public QVirtualList
+        {
+    public:
+
+    private:
+        };
+
+    // This class is for use by QITList
+    class QIndicatorTemplate : public QListObject
+        {
+    public:
+
+    private:                                
+        QString   m_sName;                  // text name of indicator
+        QString   m_sPath;                  // path of indicator library
+        RGB       m_clr;                    // indicator color
+        GraphType m_gt;                     // graph type
+        USHORT    m_cbOptions;              // length of options data
+        BYTE     *m_pbOptions;              // user-definable options data
+        };
+
+    // This is the indicator template list class.  The list
+    // is maintained by the QTemplate class, and contains a
+    // list of 'global' indicator templates.
+    class QITList : public QVirtualList
+        {
+    public:
+
+    private:
+        };
+
+    class QViewLayout : public QObject
+        {
+    public:
+
+    private:
+                                            
+        QString              m_sTitle;      // View title
+        QIndicatorDictionary m_dict;        // list of indicator template names
+        BOOL                 m_fHLCV;       // show Hi-Lo-Close-Volume
+        BOOL                 m_fHorz;       // show horizontal gridlines
+        ScalingType          m_st;          // scaling type (Arith/Log)
+        USHORT               m_nGrids;      // number of grids on a graph
+        USHORT               m_nPercent;    // real-estate percentage
+        };
+
+    class QWindowLayout : public QListObject
+        {
+    public:
+
+    private:
+        QString     m_sName;                // text name of window layout
+        QViewLayout m_rgvl[ _cViewLayouts ];// the view layouts
+        USHORT      m_dxincr;
+        };
+
+    class QWLList : public QVirtualList
+        {
+    public:
+     
+    private:
+        };
+    
+    class QTemplate : public QObject
+        {
+    public:
+
+    private:
+        QVersion        m_v;                // QObject version
+        QGeneralOptions m_genopts;          
+        QITList         m_itlist;           // list of indicator templates
+        QWLList         m_wllist;           // list of window layouts
+        QString         m_sNameDefault;     // default window layout name
+        };
+
+4.2 Documents: Major Data Declarations and Classes
+==================================================
+
+    class QQt : public QObject
+        {
+    public:
+ 
+    private:
+        QTime m_date;                       // quote date
+        NUM   m_numHi;
+        NUM   m_numLo;
+        NUM   m_numCl;
+        ULONG m_ulVl;
+        };
+
+    class QDocument : public QObject
+        {
+    public:
+
+    private:
+        QVersion m_v;                       // QObject version
+        QString  m_sName;                   // DOS file name 
+        QString  m_sTitle;                  // Title name
+        BOOL     m_fModified;               // Modified Flag
+        BOOL     m_fReadOnly;               // Read-Only flag
+        UINT     m_cQuotes;                 // count of quotes array
+        QQt     *m_rgqt;                    // array of the quote data 
+        };
+
+4.3 Interface to the Indicator Library
+======================================
+
+    This section will describe the interface to the indicator library.
+    Though Quote will be written in C++, the interface to the indicator
+    library will be a C interface.  Specifically, the following data
+    structures and calls will be used:
+
+4.3.1 Data structure used to communicate between Quote and the library
+
+    typedef NUM NEAR *NPNUM;
+    typedef NUM FAR  *LPNUM;
+
+    enum MovingAverageType { mtSimple, mtExponential, mtWeighted };
+
+    typedef struct tagDATE
+        {
+        USHORT nYear;                       // 19xx year
+        USHORT nMonth;                        // months: 1 to 12
+        USHORT nDay;                          // days: 1 to 31
+        } DATE, NEAR *NPDATE, FAR *LPDATE;
+
+    typedef struct tagQUOTE
+        {
+        NUM   numHi;
+        NUM   numLo;
+        NUM   numCl;
+        ULONG ulVl;
+        } QUOTE, NEAR *NPQUOTE, FAR *LPQUOTE;
+
+    typedef struct tagHORZLINE
+        {
+        USHORT   nLines;
+        LPNUM    lpnumLines;
+        } HORZLINE, NEAR *NPHORZLINE, FAR *LPHORZLINE;
+
+    typedef struct tagCALCULATE
+        {
+        // parameters filled in by Quote
+        DATE      date;                     // first date requested
+        USHORT    nRequest;                 // number of periods requested
+        LPNUM     lpnum;                    // area to put data
+        LPOPTIONS lpoptions;                // options data
+        
+        // parameters filled in by the library
+        USHORT     nFirst;                  // first valid point filled in
+        USHORT     nLast;                   // last valid point + 1
+        LPHORZLINE lphorzline;              // horizontal line data
+        } CALCULATE, NEAR *NPCALCULATE, FAR *LPCALCULATE;
+
+    typedef struct tagOPTIONS
+        {
+        // parameters filled in by the library
+        USHORT cbOptions;                   // length of the options buffer
+        BYTE   FAR *lpbOptions;             // options data
+        } OPTIONS, NEAR *NPOPTIONS, FAR *LPOPTIONS;
+
+    typedef struct tagGETDATA
+        {
+        // parameters filled in by the library
+        DATE    date;                       // first date request
+        USHORT  nRequest;                   // number of periods request
+        LPQUOTE lpquote;                    // area to put data
+
+        // parameters filled in the Quote
+        USHORT nFirst;                      // first quote filled in; usually 0
+        USHORT nLast;                       // last quote filled in
+        } GETDATA, NEAR *NPGETDATA, FAR *LPGETDATA;
+
+    typedef struct tagDATASET
+        {
+        // parameters filled in by the library
+        USHORT nRequest;                    // number of data points
+        LPNUM  lpnum;                       // data
+        } DATASET, NEAR *NPDATASET, FAR *LPDATASET;
+
+4.3.2 Common Routines Exported by the Indicator Library
+
+    //////////////////////////////////////////////////////////////////
+    // LibMain( )
+    //
+    int FAR PASCAL LibMain( HANDLE hInstance, WORD wDataSeg, WORD wHeapSize, LPSTR lpszCmdLine );
+
+    //////////////////////////////////////////////////////////////////
+    // WEP( )
+    int FAR PASCAL _export WEP( int nParam );
+
+    //////////////////////////////////////////////////////////////////
+    // Calculate( )
+    BOOL FAR PASCAL _export Calculate( LPCALCULATE lpcalc );
+    
+    Calculate Example
+    =================
+
+    BOOL      f;
+    NUM       rgnum[ 10 ];
+    CALCULATE calc;
+
+    lmemset( &calc, 0, sizeof( calc ) );
+    calc.date.nYear  = 1996;
+    calc.date.nMonth = 1;
+    calc.date.nDay   = 1;
+    calc.nRequest    = 10;
+    calc.lpnum       = (LPNUM) rgnum;
+
+    // previously-allocated options
+    calc.lpoptions   = options;
+    
+    f = Calculate( &calc );
+    // Now, calc.nFirst = first valid index in the array.  calc.nLast
+    // = last valid index + 1.  The number of successfully calculated
+    // points is ( nLast - nFirst ).  Any horizontal lines are 
+    // placed in the lphorzline data structure.
+
+    //////////////////////////////////////////////////////////////////
+    // Options( )
+    BOOL FAR PASCAL _export Options( LPTIONS lpoptions );
+    
+    Options Example
+    ===============
+
+    OPTIONS options;
+
+    f = Options( &options );
+    // Now, options contains pointer to user-defined options data.  The
+    // library will likely have internally made a call to a dialog proc.
+
+4.3.3 Routines Exported by Quote
+
+    //////////////////////////////////////////////////////////////////
+    // BOOL GetData( )
+    BOOL FAR PASCAL _export GetData( LPGETDATA lpgetdata );
+
+    GetData Example
+    ===============
+
+    BOOL    f;
+    GETDATA getdate;
+    QUOTE   rgqt[ 10 ];
+
+    lmemset( &getdata, 0, sizeof( getdata ) );
+    getdata.date.nYear  = 1996;
+    getdata.date.nMonth = 1;
+    getdata.date.nDay   = 1;
+    getdata.nRequest    = 10;
+    getdata.lpquote     = (LPQUOTE) rgqt;
+    f = GetData( &getdata );
+
+    //////////////////////////////////////////////////////////////////
+    // SampleMean( )
+    BOOL SampleMean( LPDATASET lpdataset, LPNUM lpnumMean );
+
+    //////////////////////////////////////////////////////////////////
+    // SampleStdDev( )
+    BOOL SampleStdDev( LPDATASET lpdataset, LPNUM lpnumStdDev );
+
+    //////////////////////////////////////////////////////////////////
+    // MovingAverage( )
+    BOOL MovingAverage( MovingAverageType mt, LPDATASET lpdataset, 
+                        USHORT nPeriod, LPNUM lpnumMovAvg );
+
+    //////////////////////////////////////////////////////////////////
+    // BOOL SumOfSquares( )
+    BOOL SumOfSquares( LPDATASET lpdataset, LPNUM lpnumSum );
+    
+
+4.4 Data Viewing Discussion
+===========================
+
+    There will be 4 data views on the main chart.  Diagram 3 illustrates
+    a sample window.  For simplicity, the 4 charts will be displayed
+    directly on the window; child windows will not be used.
+
+
+    +-+--------------------------------------------------------------+
+    |-|               Window Template Name                       |v|^|
+    +-+--------------------------------------------------------------+
+    |       |  (A) View A Title                                      |
+    |       |  +-----------------------------------------------+     |
+    |  Scale|  |                                               |     |
+    |       |  |                                               |     |
+    |       |  |               Chart Goes Here                 |     |
+    |       |  |                                               |     |
+    |       |  |                                               |     |
+    |       |  |                                               |     |
+    |       |  |                                               |     |
+    |       |  +-----------------------------------------------+     |
+    |       |                                                        |
+    |       |  (B) View B Title                                      |
+    |       |  +-----------------------------------------------+     |
+    |  Scale|  |                                               |     |
+    |       |  |                                               |     |
+    |       |  |               Chart Goes Here                 |     |
+    |       |  |                                               |     |
+    |       |  |                                               |     |
+    |       |  |                                               |     |
+    |       |  |                                               |     |
+    |       |  +-----------------------------------------------+     |
+    |       |                                                        |
+    |       |  (C) View C Title                                      |
+    |       |  +-----------------------------------------------+     |
+    |  Scale|  |                                               |     |
+    |       |  |                                               |     |
+    |       |  |               Chart Goes Here                 |     |
+    |       |  |                                               |     |
+    |       |  |                                               |     |
+    |       |  |                                               |     |
+    |       |  |                                               |     |
+    |       |  +-----------------------------------------------+     |
+    |       |                                                        |
+    |       |  (D) View D Title                                      |
+    |       |  +-----------------------------------------------+     |
+    |  Scale|  |                                               |     |
+    |       |  |                                               |     |
+    |       |  |               Chart Goes Here                 |     |
+    |       |  |                                               |     |
+    |       |  |                                               |     |
+    |       |  |                                               |     |
+    |       |  |                                               |     |
+    |       |  +-----------------------------------------------+     |
+    |      *|  1 8 15 22 2 9 16 23 3 ...                             |
+    |       |  J         F         M ...                             |
+    |       |  1995                  ...                             |
+    +----------------------------------------------------------------+
+  **| Date=xx/xx/xxxx Hi=xxx.xxx Lo=xxx.xxx Cl=xxx.xxx Vl=xxxxxx     |
+    +----------------------------------------------------------------+
+
+                            Diagram 3.
+
+          *  - Tracker (vertical line)
+          ** - Quote Box (box control)

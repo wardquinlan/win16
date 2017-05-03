@@ -1,0 +1,22 @@
+;/////////////////////////////////////////////////////////////////////////////
+;// VI.DEF
+;//
+;// VI library definition file.
+;//
+;// Copyright (c) Ward Quinlan, 1996
+;//
+;/////////////////////////////////////////////////////////////////////////////
+LIBRARY      VI
+DESCRIPTION  'Volatility Index'
+EXETYPE      WINDOWS
+CODE         PRELOAD MOVEABLE DISCARDABLE
+DATA         PRELOAD MOVEABLE SINGLE
+
+HEAPSIZE     1024                         ; initial heap size
+
+EXPORTS      WEP         @1
+             VERSTRING   @2
+             OPTIONS     @3
+             CALCULATE   @4
+             PARAMSTRING @5
+             

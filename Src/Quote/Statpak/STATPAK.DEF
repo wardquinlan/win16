@@ -1,0 +1,57 @@
+;/////////////////////////////////////////////////////////////////////////////
+;// STATPAK.DEF
+;//
+;// Statistics and memory management tool functions for use with the
+;// Quote package - Definitions file.
+;//
+;// Copyright (c) Ward Quinlan, 1996
+;//
+;/////////////////////////////////////////////////////////////////////////////
+LIBRARY      STATPAK
+DESCRIPTION  'Statistics Package'
+EXETYPE      WINDOWS
+CODE         PRELOAD MOVEABLE DISCARDABLE
+DATA         PRELOAD MOVEABLE SINGLE
+
+HEAPSIZE     1024                         ; initial heap size
+
+EXPORTS      WEP             @1
+             GAlloc          @2
+             GFree           @3
+             DataSetZero     @4
+             DataSetAlloc    @5
+             DataSetFree     @6
+             DataSetCopy     @7
+             OptionsZero     @8
+             OptionsAlloc    @9
+             OptionsFree     @10
+             OptionsCopy     @11
+             Mean            @12
+             ExpSmooth       @13
+             KFromPeriod     @14
+             PeriodFromK     @15
+             PeriodOptions   @16
+             PeriodDlgProc   @17
+             ManageCtlColor  @18
+             Options2        @19
+             Options2DlgProc @20
+             Options3        @21
+             Options3DlgProc @22
+             MinMax          @23
+             StdDev          @24
+             Rate1           @25
+             Rate2           @26
+             NewMinimum      @27
+             NewMaximum      @28
+             Absolute        @29
+             Shift           @30
+             LinReg          @31
+             Correl          @32
+             Highest         @33
+             Lowest          @34
+             Log             @35
+             Exp             @36
+             Rsi             @37
+             Vi              @38
+             Sar             @39
+             Power           @40

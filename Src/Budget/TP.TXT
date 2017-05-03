@@ -1,0 +1,158 @@
+** update checkConsistency( ) to:
+    - add up and check amounts against balances in all accounts
+    - check dates are sorted in all accounts
+
+------------------ Test Plan for Budget 2.0 ------------------
+
+
+General Tests
+-------------
+
+1.  Ensure Budget is Y2K compliant.  On Jan xx, 2000:
+    - Add a transaction
+    - Delete a transaction
+    - Balance an account
+    - Unbalance an account
+
+2.  Ensure that budget still compiles and runs w/o DEBUG on.
+
+3.  Ensure that budget is not able to load budget 1.1 files.
+
+4.  Confirm that the calculator button works, both in WIN 31 and WIN 95.
+
+
+Account Creation Tests
+----------------------
+
+1.  Create an account.  Ensure:
+    - The accounts are created and sorted in the summary window
+
+
+Transaction and Transaction Sequencing/Balancing Tests
+------------------------------------------------------
+
+N.B.  The following tests assume the creation of 3 accounts: A, B, C
+
+1.  A    B    C
+
+    1    4    7
+    2    5    8
+    3    6    9
+
+    Confirm you can add and delete and transfer transactions at the beginning, 
+    middle, and end of 'A'
+
+    For delete, confirm the confirmation dialog gets the transaction correct.
+
+2.  A    B    C
+
+    1    2    3
+    4    5    6
+    7    8    9
+
+    Confirm you can add and delete and transfer transactions at the beginning, 
+    middle, and end of 'B'
+
+    For delete, confirm the confirmation dialog gets the transaction correct.
+
+3.  A    B    C
+
+    1    2    3
+    4    5    6
+    7    8    9
+
+    Balance transaction #5 on Dec 15.  Confirm you cannot add a transaction
+    on Dec 14.
+    
+    For balancing, confirm the confirmation dialog gets the transaction correct.
+
+4.      A    B    C
+
+    14  1    2    3
+    15  4    5    6
+    16  7    8    9
+
+    Balance transaction #6 on Dec 15.  Add a transaction to B on Dec 15.  Confirm
+    the accounts now look like:
+
+    A    B    C
+
+    1    2    3
+    4    5    6
+    8    7   10
+         9
+
+    For balancing, confirm the confirmation dialog gets the transaction correct.
+
+5.  Save and then re-load the budget in #4; confirm it has not changed
+
+
+Balancing Tests
+---------------
+
+1.  Confirm you cannot balance outside of the sequencing range
+
+2.  Confirm you can balance tr#1
+
+3.  Confirm you can balance tr#max
+
+4.  Confirm you cannot unbalance an document which is not balanced
+
+5.  Confirm you can balance tr#(max/2)
+
+6.  Confirm you cannot edit transactions on (balance day - 1)
+
+7.  Confirm you cannot delete transactions on (balance day - 1)
+
+8.  Confirm you cannot transfer on (balance day - 1)
+
+9.  Repeat 6-8 using macros
+
+10.  Confirm you can edit, delete, transafer on balance day.  Confirm
+
+11.  Repeate 10 using macros
+
+
+Summary Account Tests
+--------------------
+
+1.  Confirm the summary account is consistent with other accounts 
+    (A, B, C) after entering add, delete, transfer transactions
+
+2.  Confirm the summary account is consistent with other accounts 
+    (A, B, C) after entering add, delete, transfer macros
+
+3.  Confirm you can scroll a large summary account window
+
+4.  Confirm a completely empty account is handled in the summary account
+
+
+Macro Tests
+-----------
+
+1.  Ensure that each of the following still work:
+    - Deposit
+    - Withdraw
+    - Transfer
+
+2.  Ensure that each of {A, B, C, D} still work.
+
+3.  Ensure that a macro syntax error stops the macro immediately.
+
+4.  Ensure that trying to run a macro against a non-existent account
+    fails, and the macro stops immediately.
+
+5.  Ensure that trying to run a macro against a date which has been
+    been balanced fails, and the macro stops immediately.
+
+
+Stress Tests
+------------
+
+1.  With DEBUG off, write a macro to generate 1000 transactions, 
+    10000 transactions
+
+2.  With DEBUG back on, simulate out-of-memory by running against
+    a large number of transactions.  Confirm Budget is reasonably
+    robust (although general-account consistency cannot be guaranteed
+    at this point)

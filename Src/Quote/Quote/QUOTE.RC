@@ -1,0 +1,999 @@
+//////////////////////////////////////////////////////////////////////////////
+// QUOTE.RC
+//
+// This file contains resources for Quote.
+//
+// Copyright (c) Ward Quinlan, 1996
+//////////////////////////////////////////////////////////////////////////////
+#include <windows.h>
+#include <boxctrl.h>
+#include "resource.hxx"
+
+STRINGTABLE
+    BEGIN
+        IDS_DEFAULT_TPL,         "DEFAULT.TPL"
+        IDS_MDICLIENT,           "MDICLIENT"
+        IDS_CLSCHILD,            "clsChild"
+        IDS_CLSCHILDTEXT,        "clsChildText"
+        IDS_CLSCHILDTRADELIST,   "clsChildTradeList"
+        IDS_CLSCHILDPERFSUM,     "clsPerfSumm"
+        IDS_TITLETEXT,           "Quotes (Text)"
+        IDS_TITLETRADELIST,      "Performance Results - Trades"
+        IDS_TITLESIMTRADELIST,   "Trade Simulation Results - Trades"
+        IDS_TITLEPERFSUM,        "Performance Results - Summary"
+        IDS_TITLESIMPERFSUM,     "Trade Simulation Results - Summary"
+        IDS_EMPTY,               ""
+        IDS_RETURN,              "\n";
+        IDS_APPNAME,             "Quote"
+        IDS_NOTCORRUPT,          "No memory objects were found corrupt."
+        IDS_CORRUPT,             "Some memory objects were found corrupt."
+        IDS_TEMPLATENOTFOUND,    "The template file was not found."
+        IDS_CORRUPTTEMPLATE,     "The template file is corrupt."
+        IDS_CORRUPTDOCUMENT,     "A text file format string is invalid, or the document is corrupt."
+        IDS_QUERYSAVETEMPLATE,   "Do you want to save the template changes?"
+        IDS_WINDOW_BACKGROUND,   "Window Background"
+        IDS_TEXT_FACE,           "Text Face"
+        IDS_HI_LO_CLOSE_BAR,     "Hi-Lo-Close Bar"
+        IDS_VOLUME_BAR,          "Volume Bar"
+        IDS_GRIDS                "Grid Lines"
+        IDS_BUY_SIGNAL,          "Signal - Buy"
+        IDS_SELL_SIGNAL,         "Signal - Sell"
+        IDS_DUMMY,               "dummy"
+        IDS_NAME_EXISTS,         "That name already exists."
+        IDS_ITPROC_OPTIONS,      "Options"
+        IDS_ITPROC_CALC,         "Calculate"
+        IDS_ITPROC_VERSTRING,    "VerString"
+        IDS_ITPROC_PARAMSTRING,  "ParamString"
+        IDS_ITPROC_DEFOPTIONS,   "DefOptions"
+        IDS_BADINDICATOR,        "The indicator library DLL is not valid."
+        IDS_LOAD_STRING,         "$mn $dy $yr $hi $lo $cl $vl"
+        IDS_LOAD_DELIMITERS,     "-\\t\\b"
+        IDS_SAVE_STRING,         "$mn-$dy-$yr\\t$hi\\t$lo\\t$cl\\t$vl"
+        IDS_FOPEN_RT,            "rt"
+        IDS_FOPEN_RB,            "rb"
+        IDS_FOPEN_WT,            "wt"
+        IDS_FOPEN_WB,            "wb"
+        IDS_UNTITLED,            "Untitled"
+        IDS_REPLACE,             "Replace existing file?"
+        IDS_NOPATH,              "There is no path supplied."
+        IDS_MEMORY,              "Quote has run out of memory."
+        IDS_BADDXINCR,           "Dx Incr must be > 0."
+        IDS_BADGRIDS,            "Grids must be > 0."
+        IDS_BADPERCENT,          "Percentages must sum to 100."
+        IDS_BADPERCENT2,         "Percentages must be >= 0."
+        IDS_VIEWA,               "View A"
+        IDS_VIEWB,               "View B"
+        IDS_VIEWC,               "View C"
+        IDS_VIEWD,               "View D"
+        IDS_BADNAME,             "That name is invalid."
+        IDS_UNAVAIL,             "<Unavailable>"
+        IDS_BOXCTRL,             "boxctrl"
+        IDS_SAVEQUERY,           "Save changes to current document?"
+        IDS_BADVALUE,            "That value is not valid."
+        IDS_QUOTEBOX,            " D=%02d/%02d/%d O=%6.3f H=%6.3f L=%6.3f C=%6.3f V=%.0f"
+        IDS_GENERALERROR,        "The operation was not successful."
+        IDS_BADDATE,             "That date is invalid."
+        IDS_BADQUOTE,            "That quote is invalid."
+        IDS_REMOVE,              "The quote could not be removed."
+        IDS_INDICATORINUSE,      "The Indicator Template is in use."
+        IDS_CONDITIONINUSE,      "The Condition is in use."
+        IDS_LAYOUTINUSE,         "The Window Layout is in use."
+        IDS_RULEINUSE,           "The Rule is in use."
+        IDS_VERSION,             "Quote is running the wrong version of QObject."
+        IDS_FILLIN,              "All fields must be filled in."
+        IDS_NONE,                "<None>"
+        IDS_CANTEVAL,            "The rule could not be evaluated."
+        IDS_DEVICEMODE,          "DEVICEMODE"
+        IDS_DOTDRV,              ".DRV"
+        IDS_WININI_WINDOWS,      "windows"
+        IDS_WININI_DEVICE,       "device"
+        IDS_TEXT_FILE_CORRUPT_AT "Text File corrupt at line %ld."
+        IDS_CUSTOM_VERSTRING,    "Custom Indicator"
+        IDS_CUSTOM_LIB,          "<No Path>"
+        IDS_EXTERNAL_VERSTRING,  "External Indicator"
+        IDS_EXTERNAL_LIB,        "<No Path>"
+        IDS_SEPARATOR,           "----------------------------------\n\n"
+        IDS_POSITIVE,            "The value must be non-negative"
+        IDS_NOVALUE,             "There is no value for that date"
+        IDS_USERCONFIRM,         "Are you sure?"
+        IDS_NET_PROFIT,          "Total net profit"
+        IDS_ROA,                 "Return on account"
+        IDS_PROFIT_FACTOR,       "Profit factor"
+        IDS_AVG_TRADE,           "Average trade"
+        IDS_PCT_PROFITABLE,      "Percent profitable"
+        IDS_RATIO_AVGWIN_AVGLOSS,"Avg win/avg loss"
+        IDS_N_TRADES,            "Number of trades"
+        IDS_ACCOUNT_SIZE,        "Account size"
+        IDS_EXTINDFILE_ERROR     "Quote can't read the external indicator file"
+        IDS_EXTINDFILE_CORRUPT   "The external indicator file is corrupt"
+        IDS_BAD_EXPORT,          "You cannot export the current template file into itself"
+        IDS_BAD_SAVE_TEXT,       "Invalid window type to save-to-file"
+    END
+
+IDI_QUOTE ICON quote.ico
+
+IDB_NEW          BITMAP NEW.BMP
+IDB_NEW2         BITMAP NEW2.BMP
+IDB_OPEN         BITMAP OPEN.BMP
+IDB_OPEN2        BITMAP OPEN2.BMP
+IDB_SAVE         BITMAP SAVE.BMP
+IDB_SAVE2        BITMAP SAVE2.BMP
+IDB_SAVETP       BITMAP SAVETP.BMP
+IDB_SAVETP2      BITMAP SAVETP2.BMP
+IDB_PRINT        BITMAP PRINT.BMP
+IDB_PRINT2       BITMAP PRINT2.BMP
+IDB_EXIT         BITMAP EXIT.BMP
+IDB_EXIT2        BITMAP EXIT2.BMP
+IDB_LP           BITMAP LP.BMP
+IDB_LP2          BITMAP LP2.BMP
+IDB_LN           BITMAP LN.BMP
+IDB_LN2          BITMAP LN2.BMP
+IDB_BLANK        BITMAP BLANK.BMP
+IDB_BLANK2       BITMAP BLANK2.BMP
+IDB_CIT          BITMAP CIT.BMP
+IDB_CIT2         BITMAP CIT2.BMP
+IDB_CSIT         BITMAP CSIT.BMP
+IDB_CSIT2        BITMAP CSIT2.BMP
+IDB_XIT          BITMAP XIT.BMP
+IDB_XIT2         BITMAP XIT2.BMP
+IDB_DIT          BITMAP DIT.BMP
+IDB_DIT2         BITMAP DIT2.BMP
+IDB_CWL          BITMAP CWL.BMP
+IDB_CWL2         BITMAP CWL2.BMP
+IDB_DWL          BITMAP DWL.BMP
+IDB_DWL2         BITMAP DWL2.BMP
+IDB_RULE         BITMAP RULE.BMP
+IDB_RULE2        BITMAP RULE2.BMP
+IDB_DRULE        BITMAP DRULE.BMP
+IDB_DRULE2       BITMAP DRULE2.BMP
+IDB_COND         BITMAP COND.BMP
+IDB_COND2        BITMAP COND2.BMP
+IDB_DCOND        BITMAP DCOND.BMP
+IDB_DCOND2       BITMAP DCOND2.BMP
+IDB_CONST        BITMAP CONST.BMP
+IDB_CONST2       BITMAP CONST2.BMP
+IDB_PERFORMANCE  BITMAP RPT.BMP
+IDB_PERFORMANCE2 BITMAP RPT2.BMP
+IDB_SIM          BITMAP SIM.BMP
+IDB_SIM2         BITMAP SIM2.BMP
+IDB_SCANNER      BITMAP SC.BMP
+IDB_SCANNER2     BITMAP SC2.BMP
+IDB_INDVAL       BITMAP INDVAL.BMP
+IDB_INDVAL2      BITMAP INDVAL2.BMP
+IDB_COLOR        BITMAP COLOR.BMP
+IDB_COLOR2       BITMAP COLOR2.BMP
+IDB_TEXT         BITMAP TEXT.BMP
+IDB_TEXT2        BITMAP TEXT2.BMP
+IDB_NEW_WINDOW   BITMAP NEWWIN.BMP
+IDB_NEW_WINDOW2  BITMAP NEWWIN2.BMP
+IDB_NEW_TEXTWINDOW  BITMAP NEWTWIN.BMP
+IDB_NEW_TEXTWINDOW2 BITMAP NEWTWIN2.BMP
+
+IDM_MAIN MENU
+BEGIN
+    POPUP "&File"
+    BEGIN                                                       
+        MENUITEM "&New\tCtrl+N",                                IDM_NEW
+        MENUITEM "&Open...\tCtrl+O",                            IDM_OPEN
+        MENUITEM "&Save\tCtrl+S",                               IDM_SAVE
+        MENUITEM "Save &As...\tCtrl+A",                         IDM_SAVEAS
+        MENUITEM "Save Text &Window...\tCtrl+Shift+U",          IDM_SAVE_TEXT
+        MENUITEM SEPARATOR
+        MENUITEM "Save &Template\tCtrl+Shift+S",                IDM_SAVETEMPLATE
+        MENUITEM SEPARATOR
+        MENUITEM "Print Setup...\tCtrl+Shift+P",                IDM_PRINT_SETUP
+        MENUITEM "Print...\tCtrl+P",                            IDM_PRINT
+        MENUITEM SEPARATOR
+        MENUITEM "Open Previous\tCtrl+Shift+A",                 IDM_LOAD_PREV
+        MENUITEM "Open Next\tCtrl+Shift+N",                     IDM_LOAD_NEXT
+        MENUITEM SEPARATOR
+        MENUITEM "&Export Template to Text...\tCtrl+Shift+O",   IDM_EXPORT_TEMPLATE
+        MENUITEM SEPARATOR
+        MENUITEM "E&xit",                                       IDM_EXIT
+    END
+
+    POPUP "&Chart"
+    BEGIN
+        MENUITEM "&Add Quote...\tCtrl+Q",                       IDM_ADD_QUOTE
+        MENUITEM "&Delete Quote...",                            IDM_DELETE_QUOTE
+    END
+
+    POPUP "&Template"
+    BEGIN
+        MENUITEM "Create Indicator &Template...\tCtrl+T",       IDM_CREATE_IT
+        MENUITEM "Create Custom &Indicator...\tCtrl+Shift+B",   IDM_CUSTOM_IT
+        MENUITEM "Create E&xternal Indicator...\tCtrl+Shift+M", IDM_EXTERNAL_IT
+        MENUITEM "Delete Indicator T&emplate...",               IDM_DELETE_IT
+        MENUITEM SEPARATOR
+        MENUITEM "Create Window &Layout...\tCtrl+L",            IDM_CREATE_WL
+        MENUITEM "Delete Window L&ayout...",                    IDM_DELETE_WL
+        MENUITEM SEPARATOR
+        MENUITEM "Create Trading &Rule...\tCtrl+Y",             IDM_CREATE_RULE
+        MENUITEM "Delete Trading R&ule...",                     IDM_DELETE_RULE
+        MENUITEM SEPARATOR
+        MENUITEM "Create C&ondition...\tCtrl+H",                IDM_CREATE_COND
+        MENUITEM "Delete Co&ndition...",                        IDM_DELETE_COND
+        MENUITEM SEPARATOR
+        MENUITEM "Create &Constant...\tCtrl+J",                 IDM_CREATE_CONST
+        MENUITEM "Delete Con&stant...",                         IDM_DELETE_CONST
+    END
+
+    POPUP "T&ools"
+    BEGIN
+        MENUITEM "&Performance Tester...\tCtrl+D",              IDM_PERFORMANCE
+        MENUITEM "Trade Si&mulator...\tCtrl+Shift+I",           IDM_TRADESIM
+        MENUITEM "Chart &Scanner...\tCtrl+Shift+R",             IDM_CHART_SCANNER
+        MENUITEM "Indicator Value...\tCtrl+Shift+V",            IDM_INDVAL
+        MENUITEM SEPARATOR
+        MENUITEM "Clea&r Performance Test Data\tCtrl+Shift+E",  IDM_CLEAR_PERF_DATA
+    END
+    
+    POPUP "O&ptions"
+    BEGIN
+        MENUITEM "&Font Size...\tCtrl+F",                       IDM_FONT_SIZE
+        MENUITEM "&Color...\tCtrl+R",                           IDM_COLOR
+        MENUITEM "&Text File Format...\tCtrl+M",                IDM_TEXT_FORMAT
+        MENUITEM "&Browser...\tCtrl+Shift+W",                   IDM_BROWSER
+        MENUITEM "&External Indicator File...\tCtrl+Shift+K",   IDM_EXTERNAL_INDICATOR_FILE
+        MENUITEM SEPARATOR
+        MENUITEM "Show &Quote Box\tCtrl+B",                     IDM_QUOTE_BOX
+        MENUITEM "Show T&racker\tCtrl+K",                       IDM_TRACKER
+        MENUITEM "&Auto-Open Text Window\tCtrl+Shift+X",        IDM_AUTOOPENTEXT
+        MENUITEM "Te&xt Grid Lines\tCtrl+Shift+G",              IDM_TEXT_GRID_LINES
+        MENUITEM SEPARATOR
+        POPUP    "Scaling"
+        BEGIN
+            POPUP "Screen"
+            BEGIN
+                MENUITEM "By Page"                              IDM_SCR_PAGE
+                MENUITEM "By Chart"                             IDM_SCR_CHART
+            END
+            POPUP "Printer"
+            BEGIN
+                MENUITEM "By Page"                              IDM_PRT_PAGE
+                MENUITEM "By Chart"                             IDM_PRT_CHART
+            END
+        END
+        MENUITEM SEPARATOR
+        POPUP    "Dates"
+        BEGIN
+            MENUITEM "None",                                    IDM_DATES_NONE
+            MENUITEM "Months",                                  IDM_DATES_MONTHS
+            MENUITEM "Years",                                   IDM_DATES_YEARS
+        END
+    END
+
+    POPUP "&Window"
+    BEGIN
+        MENUITEM "&Cascade\tCtrl+E",                                 IDM_CASCADE  
+        MENUITEM "&Tile\tCtrl+I",                                    IDM_TILE
+        MENUITEM "&Arrange Icons\tCtrl+G"                            IDM_ARRANGE_ICONS
+        MENUITEM SEPARATOR
+        MENUITEM "&New Window...\tCtrl+W",                           IDM_NEW_WINDOW
+        MENUITEM "New Te&xt Window\tCtrl+Shift+Z",                   IDM_NEW_TEXTWINDOW
+        MENUITEM SEPARATOR
+        MENUITEM "New Performance Tra&de List...\tCtrl+Shift+D",     IDM_NEW_TRADELIST
+        MENUITEM "New Per&formance Summary Window...\tCtrl+Shift+F", IDM_NEW_PERFSUM
+        MENUITEM SEPARATOR
+        MENUITEM "New Simulato&r Trade List...\tCtrl+Shift+T",       IDM_NEW_STRADELIST
+        MENUITEM "New Simulator Sum&mary Window...\tCtrl+Shift+Y",   IDM_NEW_SIMRESULTS
+    END
+
+#ifdef DEBUG
+    POPUP "T&racing"
+    BEGIN
+        MENUITEM "Off",                                         IDM_TR_OFF
+        MENUITEM "Normal",                                      IDM_TR_NORMAL
+        MENUITEM "Intense",                                     IDM_TR_INTENSE
+        MENUITEM "Assert Valid",                                IDM_TR_ASSERTVALID
+        MENUITEM "Walk Memory",                                 IDM_TR_WALKMEMORY
+        MENUITEM "Check Memory",                                IDM_TR_CHECKMEMORY
+        MENUITEM "Memory Stats",                                IDM_TR_MEMORYSTATS
+        MENUITEM "Count QQt's",                                 IDM_TR_COUNTQQTS
+        MENUITEM "Dump Cache",                                  IDM_DUMP_CACHE
+        MENUITEM "Clear Cache",                                 IDM_CLEAR_CACHE
+#ifdef _CONSTANTS
+        MENUITEM "Dump Constants",                              IDM_CONSTANTS
+#endif
+    END
+#endif
+
+    MENUITEM "A&bout...",                                       IDM_ABOUT
+END
+
+// Reserved Accelerator Sequences:
+// Ctrl+Z - Undo
+// Ctrl+X - Cut
+// Ctrl+C - Copy
+// Ctrl+V - Paste
+IDA_QUOTE ACCELERATORS
+    {
+    "N", IDM_NEW,             CONTROL, VIRTKEY
+    "O", IDM_OPEN,            CONTROL, VIRTKEY
+    "S", IDM_SAVE,            CONTROL, VIRTKEY
+    "A", IDM_SAVEAS,          CONTROL, VIRTKEY
+    "S", IDM_SAVETEMPLATE,    CONTROL, VIRTKEY, SHIFT
+    "P", IDM_PRINT_SETUP,     CONTROL, VIRTKEY, SHIFT
+    "P", IDM_PRINT,           CONTROL, VIRTKEY
+    "A", IDM_LOAD_PREV,       CONTROL, VIRTKEY, SHIFT
+    "N", IDM_LOAD_NEXT,       CONTROL, VIRTKEY, SHIFT
+    "Q", IDM_ADD_QUOTE,       CONTROL, VIRTKEY
+    "T", IDM_CREATE_IT,       CONTROL, VIRTKEY
+    "B", IDM_CUSTOM_IT,       CONTROL, VIRTKEY, SHIFT
+    "L", IDM_CREATE_WL,       CONTROL, VIRTKEY
+    "Y", IDM_CREATE_RULE,     CONTROL, VIRTKEY
+    "D", IDM_PERFORMANCE,     CONTROL, VIRTKEY
+    "F", IDM_FONT_SIZE,       CONTROL, VIRTKEY
+    "R", IDM_COLOR,           CONTROL, VIRTKEY
+    "M", IDM_TEXT_FORMAT,     CONTROL, VIRTKEY
+    "W", IDM_BROWSER,         CONTROL, VIRTKEY, SHIFT
+    "B", IDM_QUOTE_BOX,       CONTROL, VIRTKEY
+    "K", IDM_TRACKER,         CONTROL, VIRTKEY
+    "E", IDM_CASCADE,         CONTROL, VIRTKEY
+    "I", IDM_TILE,            CONTROL, VIRTKEY
+    "G", IDM_ARRANGE_ICONS,   CONTROL, VIRTKEY
+    "W", IDM_NEW_WINDOW,      CONTROL, VIRTKEY
+    "Z", IDM_NEW_TEXTWINDOW,  CONTROL, VIRTKEY, SHIFT
+    "U", IDM_ABOUT,           CONTROL, VIRTKEY
+    "U", IDM_SAVE_TEXT,       CONTROL, VIRTKEY, SHIFT
+    "R", IDM_CHART_SCANNER,   CONTROL, VIRTKEY, SHIFT
+    "V", IDM_INDVAL,          CONTROL, VIRTKEY, SHIFT
+    "X", IDM_AUTOOPENTEXT,    CONTROL, VIRTKEY, SHIFT
+    "H", IDM_CREATE_COND,     CONTROL, VIRTKEY
+    "D", IDM_NEW_TRADELIST,   CONTROL, VIRTKEY, SHIFT
+    "E", IDM_CLEAR_PERF_DATA, CONTROL, VIRTKEY, SHIFT
+    "F", IDM_NEW_PERFSUM,     CONTROL, VIRTKEY, SHIFT
+    "G", IDM_TEXT_GRID_LINES, CONTROL, VIRTKEY, SHIFT
+    "J", IDM_CREATE_CONST,    CONTROL, VIRTKEY
+    "K", IDM_EXTERNAL_INDICATOR_FILE, CONTROL, VIRTKEY, SHIFT
+    "M", IDM_EXTERNAL_IT,             CONTROL, VIRTKEY, SHIFT
+    "O", IDM_EXPORT_TEMPLATE,         CONTROL, VIRTKEY, SHIFT
+    "I", IDM_TRADESIM,                CONTROL, VIRTKEY, SHIFT
+    "T", IDM_NEW_STRADELIST,          CONTROL, VIRTKEY, SHIFT
+    "Y", IDM_NEW_SIMRESULTS,          CONTROL, VIRTKEY, SHIFT
+    }
+
+IDD_CREATE_RULE DIALOG 8, 8, 248, 248
+STYLE DS_MODALFRAME | WS_POPUP | WS_VISIBLE | WS_CAPTION | WS_SYSMENU
+CAPTION "Create Trading Rule"
+FONT 8, "MS Sans Serif"
+BEGIN
+    LTEXT           "Rule Name:", -1, 8, 8, 96, 8
+    COMBOBOX        IDC_RULE, 8, 16, 96, 112, CBS_DROPDOWN | CBS_SORT | 
+                    WS_VSCROLL | WS_TABSTOP
+    
+    LTEXT           "Entry:", -1, 8, 48, 112, 8
+    EDITTEXT        IDC_BUY, 8, 56, 112, 56, ES_MULTILINE | ES_AUTOVSCROLL | 
+                    ES_AUTOHSCROLL | ES_WANTRETURN
+    
+    LTEXT           "Entry Filter:", -1, 128, 48, 112, 8
+    EDITTEXT        IDC_FILTER, 128, 56, 112, 56, ES_MULTILINE | ES_AUTOVSCROLL | 
+                    ES_AUTOHSCROLL | ES_WANTRETURN
+
+    LTEXT           "Exit:", -1, 8, 120, 112, 8
+    EDITTEXT        IDC_SELL, 8, 128, 112, 56, ES_MULTILINE | ES_AUTOVSCROLL | 
+                    ES_AUTOHSCROLL | ES_WANTRETURN
+    
+    LTEXT           "Exit Filter:", -1, 128, 120, 112, 8
+    EDITTEXT        IDC_FILTER2, 128, 128, 112, 56, ES_MULTILINE | ES_AUTOVSCROLL | 
+                    ES_AUTOHSCROLL | ES_WANTRETURN
+                     
+    GROUPBOX        "Enter/Exit on:", -1, 8, 192, 96, 48
+    CONTROL         "Current Close", IDC_CURRENT_CLOSE, "Button", 
+                    BS_AUTORADIOBUTTON | WS_TABSTOP, 16, 208, 64, 10
+    CONTROL         "Next Open", IDC_NEXT_OPEN, "Button", 
+                    BS_AUTORADIOBUTTON | WS_TABSTOP, 16, 224, 64, 10
+
+    PUSHBUTTON      "C&lose", IDCANCEL, 192, 16, 48, 14
+    PUSHBUTTON      "&Update", IDOK, 192, 32, 48, 14
+END
+
+IDD_DELETE_RULE DIALOG 8, 8, 148, 56
+STYLE DS_MODALFRAME | WS_POPUP | WS_VISIBLE | WS_CAPTION | WS_SYSMENU
+CAPTION "Delete Trading Rule"
+FONT 8, "MS Sans Serif"
+BEGIN
+    LTEXT           "Name:", -1, 4, 8, 36, 8
+    COMBOBOX        IDC_RULE, 32, 8, 64, 112, CBS_DROPDOWNLIST | CBS_SORT | 
+                    WS_VSCROLL | WS_TABSTOP
+    PUSHBUTTON      "C&lose", IDCANCEL, 104, 8, 40, 14, WS_TABSTOP
+    PUSHBUTTON      "&Delete", IDOK, 104, 24, 40, 14, WS_TABSTOP
+END
+
+IDD_CHART_SCANNER DIALOG 8, 8, 170, 136
+STYLE DS_MODALFRAME | WS_POPUP | WS_VISIBLE | WS_CAPTION | WS_SYSMENU
+CAPTION "Chart Scanner"
+FONT 8, "MS Sans Serif"
+BEGIN
+    LTEXT           "Rule Name:", -1, 8, 8, 96, 8
+    COMBOBOX        IDC_RULE, 8, 16, 88, 112, CBS_DROPDOWNLIST | CBS_SORT |
+                    WS_VSCROLL | WS_TABSTOP
+
+    LTEXT           "Number of days:", -1, 8, 32, 96, 8
+    EDITTEXT        IDC_DAYS, 8, 40, 48, 12, ES_AUTOHSCROLL | WS_TABSTOP
+
+    LTEXT           "File Extensions:", -1, 8, 56, 96, 8
+    COMBOBOX        IDC_FILE_EXT, 8, 64, 88, 48, CBS_DROPDOWNLIST | 
+                    WS_VSCROLL | WS_TABSTOP
+
+    GROUPBOX        "Scan Type", -1, 104, 56, 56, 72
+    CONTROL         "Buys",       IDC_BUYS, "Button", BS_AUTORADIOBUTTON | WS_TABSTOP, 
+                    112, 72, 40, 10
+    CONTROL         "Sells",     IDC_SELLS, "Button", BS_AUTORADIOBUTTON | WS_TABSTOP, 
+                    112, 88, 40, 10
+    CONTROL         "Both",       IDC_BOTH, "Button", BS_AUTORADIOBUTTON | WS_TABSTOP, 
+                    112, 104, 40, 10
+    
+    PUSHBUTTON      "C&lose", IDCANCEL, 120, 8, 40, 14
+    PUSHBUTTON      "&Start", IDOK, 120, 24, 40, 14
+END
+
+IDD_TRADESIM DIALOG 8, 8, 172, 192
+STYLE DS_MODALFRAME | WS_POPUP | WS_VISIBLE | WS_CAPTION | WS_SYSMENU
+CAPTION "Trade Simulator"
+FONT 8, "MS Sans Serif"
+BEGIN
+    LTEXT           "Rule Name", -1, 8, 8, 96, 8
+    COMBOBOX        IDC_RULE, 8, 16, 96, 112, CBS_DROPDOWNLIST | CBS_SORT |
+                    WS_VSCROLL | WS_TABSTOP
+
+    GROUPBOX        "Test Type", -1, 8, 32, 96, 48
+    CONTROL         "Loaded Security", IDC_LOADED_COMPANY, "Button", 
+                    BS_AUTORADIOBUTTON | WS_TABSTOP, 16, 48, 64, 10
+    CONTROL         "All Securities", IDC_ALL_COMPANIES, "Button", 
+                    BS_AUTORADIOBUTTON | WS_TABSTOP, 16, 64, 64, 10
+
+    LTEXT           "Initial Account Size", -1, 8, 88, 96, 8
+    EDITTEXT        IDC_INITIAL_ACCOUNT, 8, 96, 96, 12, ES_AUTOHSCROLL | WS_TABSTOP
+
+    LTEXT           "Position Size", -1, 8, 112, 96, 8
+    EDITTEXT        IDC_POSITION, 8, 120, 96, 12, ES_AUTOHSCROLL | WS_TABSTOP
+
+    LTEXT           "Commission Size", -1, 8, 136, 96, 8
+    EDITTEXT        IDC_COMMISSION, 8, 144, 96, 12, ES_AUTOHSCROLL | WS_TABSTOP
+
+    LTEXT           "File Extensions", -1, 8, 160, 96, 8
+    COMBOBOX        IDC_FILE_EXT, 8, 168, 96, 48, CBS_DROPDOWNLIST | 
+                    WS_VSCROLL | WS_TABSTOP
+
+    PUSHBUTTON      "C&lose", IDCANCEL, 124, 16, 40, 14
+    PUSHBUTTON      "&Start", IDOK, 124, 32, 40, 14
+END
+
+IDD_PERFORMANCE DIALOG 8, 8, 204, 248
+STYLE DS_MODALFRAME | WS_POPUP | WS_VISIBLE | WS_CAPTION | WS_SYSMENU
+CAPTION "Performance Tester"
+FONT 8, "MS Sans Serif"
+BEGIN
+    LTEXT           "Rule Name", -1, 8, 8, 96, 8
+    COMBOBOX        IDC_RULE, 8, 16, 96, 112, CBS_DROPDOWNLIST | CBS_SORT |
+                    WS_VSCROLL | WS_TABSTOP
+
+    GROUPBOX        "Test Type", -1, 8, 32, 80, 48
+    CONTROL         "Loaded Security", IDC_LOADED_COMPANY, "Button", 
+                    BS_AUTORADIOBUTTON | WS_TABSTOP, 16, 48, 64, 10
+    CONTROL         "All Securities", IDC_ALL_COMPANIES, "Button", 
+                    BS_AUTORADIOBUTTON | WS_TABSTOP, 16, 64, 64, 10
+
+    LTEXT           "Position Size", -1, 8, 88, 56, 8
+    EDITTEXT        IDC_POSITION, 8, 96, 56, 12, ES_AUTOHSCROLL | WS_TABSTOP
+
+    LTEXT           "Commission Size", -1, 72, 88, 56, 8
+    EDITTEXT        IDC_COMMISSION, 72, 96, 56, 12, ES_AUTOHSCROLL | WS_TABSTOP
+
+    LTEXT           "File Extensions", -1, 8, 112, 96, 8
+    COMBOBOX        IDC_FILE_EXT, 8, 120, 96, 48, CBS_DROPDOWNLIST | 
+                    WS_VSCROLL | WS_TABSTOP
+
+    GROUPBOX        "Optimization", -1, 8, 136, 188, 104
+    LTEXT           "Constant", -1,  16, 152, 64, 8
+    CTEXT           "Start",    -1,  84, 152, 32, 8
+    CTEXT           "Step",     -1, 120, 152, 32, 8
+    CTEXT           "N",        -1, 156, 152, 32, 8
+
+    COMBOBOX        IDC_CONST1, 16, 164, 64, 112, CBS_DROPDOWNLIST | CBS_SORT |
+                    WS_VSCROLL | WS_TABSTOP
+    EDITTEXT        IDC_START1, 84, 164, 32, 12, ES_AUTOHSCROLL | WS_TABSTOP
+    EDITTEXT        IDC_STEP1, 120, 164, 32, 12, ES_AUTOHSCROLL | WS_TABSTOP
+    EDITTEXT        IDC_N1,    156, 164, 32, 12, ES_AUTOHSCROLL | WS_TABSTOP
+
+    COMBOBOX        IDC_CONST2, 16, 180, 64, 112, CBS_DROPDOWNLIST | CBS_SORT |
+                    WS_VSCROLL | WS_TABSTOP
+    EDITTEXT        IDC_START2, 84, 180, 32, 12, ES_AUTOHSCROLL | WS_TABSTOP
+    EDITTEXT        IDC_STEP2, 120, 180, 32, 12, ES_AUTOHSCROLL | WS_TABSTOP
+    EDITTEXT        IDC_N2,    156, 180, 32, 12, ES_AUTOHSCROLL | WS_TABSTOP
+
+    COMBOBOX        IDC_CONST3, 16, 196, 64, 112, CBS_DROPDOWNLIST | CBS_SORT |
+                    WS_VSCROLL | WS_TABSTOP
+    EDITTEXT        IDC_START3, 84, 196, 32, 12, ES_AUTOHSCROLL | WS_TABSTOP
+    EDITTEXT        IDC_STEP3, 120, 196, 32, 12, ES_AUTOHSCROLL | WS_TABSTOP
+    EDITTEXT        IDC_N3,    156, 196, 32, 12, ES_AUTOHSCROLL | WS_TABSTOP
+
+    LTEXT           "Sort By", -1, 16, 212, 96, 8
+    COMBOBOX        IDC_SORT_BY, 16, 220, 96, 112, CBS_DROPDOWNLIST | 
+                    WS_VSCROLL | WS_TABSTOP
+
+    PUSHBUTTON      "C&lose", IDCANCEL, 156, 16, 40, 14
+    PUSHBUTTON      "&Start", IDOK, 156, 32, 40, 14
+
+END
+
+IDD_INDICATOR_VALUE DIALOG 8, 8, 148, 48
+STYLE DS_MODALFRAME | WS_POPUP | WS_VISIBLE | WS_CAPTION | WS_SYSMENU
+CAPTION "Indicator Value"
+FONT 8, "MS Sans Serif"
+BEGIN
+    LTEXT           "Name:", -1, 8, 8, 36, 8
+    COMBOBOX        IDC_TEMPLATE, 32, 8, 64, 112, CBS_DROPDOWNLIST | CBS_SORT | 
+                    WS_VSCROLL | WS_TABSTOP
+    
+    LTEXT           "Date:", -1, 8, 24, 20, 8
+    EDITTEXT        IDC_DATE, 32, 24, 64, 12, ES_AUTOHSCROLL | WS_TABSTOP
+
+    PUSHBUTTON      "C&lose", IDCANCEL, 104, 8, 40, 14, WS_TABSTOP
+    PUSHBUTTON      "&Value", IDOK, 104, 24, 40, 14, WS_TABSTOP
+END
+
+IDD_ADD_QUOTE DIALOG 8, 8, 160, 112
+STYLE DS_MODALFRAME | WS_POPUP | WS_VISIBLE | WS_CAPTION | WS_SYSMENU
+CAPTION "Add Quote"
+FONT 8, "MS Sans Serif"
+BEGIN
+    EDITTEXT        IDC_DATE, 56, 8, 32, 12, ES_AUTOHSCROLL | WS_TABSTOP
+    EDITTEXT        IDC_OP, 56, 24, 32, 12, ES_AUTOHSCROLL | WS_TABSTOP
+    EDITTEXT        IDC_HI, 56, 40, 32, 12, ES_AUTOHSCROLL | WS_TABSTOP
+    EDITTEXT        IDC_LO, 56, 56, 32, 12, ES_AUTOHSCROLL | WS_TABSTOP
+    EDITTEXT        IDC_CL, 56, 72, 32, 12, ES_AUTOHSCROLL | WS_TABSTOP
+    EDITTEXT        IDC_VL, 56, 88, 32, 12, ES_AUTOHSCROLL | WS_TABSTOP
+    PUSHBUTTON      "C&lose", IDCANCEL, 104, 8, 48, 14, WS_TABSTOP
+    PUSHBUTTON      "&Add",  IDOK,    104, 24, 48, 14, WS_TABSTOP
+    LTEXT           "Open:", -1, 16, 24, 20, 8
+    LTEXT           "High:", -1, 16, 40, 20, 8
+    LTEXT           "Low:", -1, 16, 56, 20, 8
+    LTEXT           "Close:", -1, 16, 72, 32, 8
+    LTEXT           "Volume:", -1, 16, 88, 32, 8
+    LTEXT           "Date:", -1, 16, 8, 20, 8
+END
+
+IDD_DELETE_QUOTE DIALOG 8, 8, 132, 48
+STYLE DS_MODALFRAME | WS_POPUP | WS_VISIBLE | WS_CAPTION | WS_SYSMENU
+CAPTION "Delete Quote"
+FONT 8, "MS Sans Serif"
+BEGIN
+    LTEXT           "Date:", -1, 8, 8, 20, 8
+    EDITTEXT        IDC_DATE, 32, 8, 48, 12, ES_AUTOHSCROLL | WS_TABSTOP
+    PUSHBUTTON      "C&lose", IDCANCEL, 88, 8, 40, 14, WS_TABSTOP
+    PUSHBUTTON      "&Delete", IDOK, 88, 24, 40, 14, WS_TABSTOP
+END
+
+IDD_EXTERNAL_INDICATOR_FILE DIALOG 8, 8, 132, 48
+STYLE DS_MODALFRAME | WS_POPUP | WS_VISIBLE | WS_CAPTION | WS_SYSMENU
+CAPTION "External Indicator File"
+FONT 8, "MS Sans Serif"
+BEGIN
+    EDITTEXT        IDC_EXTERNAL_INDICATOR_FILE, 8, 8, 64, 12, ES_AUTOHSCROLL | WS_TABSTOP
+    PUSHBUTTON      "C&lose", IDCANCEL, 88, 8, 40, 14, WS_TABSTOP
+    PUSHBUTTON      "&Update", IDOK, 88, 24, 40, 14, WS_TABSTOP
+END
+
+IDD_BROWSER DIALOG 8, 8, 132, 48
+STYLE DS_MODALFRAME | WS_POPUP | WS_VISIBLE | WS_CAPTION | WS_SYSMENU
+CAPTION "File Browser"
+FONT 8, "MS Sans Serif"
+BEGIN
+    EDITTEXT        IDC_BROWSER, 8, 8, 64, 12, ES_AUTOHSCROLL | WS_TABSTOP
+    PUSHBUTTON      "C&lose", IDCANCEL, 88, 8, 40, 14, WS_TABSTOP
+    PUSHBUTTON      "&Update", IDOK, 88, 24, 40, 14, WS_TABSTOP
+END
+
+IDD_FONT_SIZE DIALOG 8, 8, 132, 48
+STYLE DS_MODALFRAME | WS_POPUP | WS_VISIBLE | WS_CAPTION | WS_SYSMENU
+CAPTION "Font Size"
+FONT 8, "MS Sans Serif"
+BEGIN
+    LTEXT           "Size:", -1, 8, 8, 20, 8
+    EDITTEXT        IDC_FONT_SIZE, 32, 8, 48, 12, ES_AUTOHSCROLL | WS_TABSTOP
+    PUSHBUTTON      "C&lose", IDCANCEL, 88, 8, 40, 14, WS_TABSTOP
+    PUSHBUTTON      "&Update", IDOK, 88, 24, 40, 14, WS_TABSTOP
+END
+
+IDD_NEW_WINDOW DIALOG 8, 8, 148, 56
+STYLE DS_MODALFRAME | WS_POPUP | WS_VISIBLE | WS_CAPTION | WS_SYSMENU
+CAPTION "New Window"
+FONT 8, "MS Sans Serif"
+BEGIN
+    LTEXT           "Layout:", -1, 4, 8, 36, 8
+    COMBOBOX        IDC_LAYOUT, 40, 8, 56, 112, CBS_DROPDOWNLIST | CBS_SORT | 
+                    WS_VSCROLL | WS_TABSTOP
+    CONTROL         "Maximized", IDC_MAXIMIZED, "Button", 
+                    BS_AUTOCHECKBOX | WS_TABSTOP, 40, 32, 56, 8
+    PUSHBUTTON      "C&lose", IDCANCEL, 104, 8, 40, 14, WS_TABSTOP
+    PUSHBUTTON      "&New", IDOK, 104, 24, 40, 14, WS_TABSTOP
+END
+
+IDD_COLOR DIALOG 8, 8, 208, 64
+STYLE DS_MODALFRAME | WS_POPUP | WS_VISIBLE | WS_CAPTION | WS_SYSMENU
+CAPTION "Color"
+FONT 8, "MS Sans Serif"
+BEGIN
+    COMBOBOX        IDC_ATTRIBUTE, 8, 8, 80, 112, CBS_DROPDOWNLIST | CBS_SORT | 
+                    WS_VSCROLL | WS_TABSTOP
+    COMBOBOX        IDC_COLOR, 96, 8, 56, 112, CBS_DROPDOWNLIST | CBS_OWNERDRAWFIXED | 
+                    WS_VSCROLL | WS_TABSTOP
+    PUSHBUTTON      "C&lose", IDCANCEL, 160, 8, 40, 14, WS_TABSTOP
+    PUSHBUTTON      "&Update", IDOK, 160, 24, 40, 14, WS_TABSTOP
+END
+
+IDD_TEXT_FORMAT DIALOG 8, 8, 144, 88
+STYLE DS_MODALFRAME | WS_POPUP | WS_VISIBLE | WS_CAPTION | WS_SYSMENU
+CAPTION "Text File Format"
+FONT 8, "MS Sans Serif"
+BEGIN
+    LTEXT           "Load String:", -1, 8, 8, 64, 8
+    EDITTEXT        IDC_LOAD_STRING, 8, 16, 72, 12, ES_AUTOHSCROLL
+    LTEXT           "Load Delimiters:", -1, 8, 32, 64, 8
+    EDITTEXT        IDC_LOAD_DELIMITERS, 8, 40, 72, 12, ES_AUTOHSCROLL
+    LTEXT           "Save String:", -1, 8, 56, 64, 8
+    EDITTEXT        IDC_SAVE_STRING, 8, 64, 72, 12, ES_AUTOHSCROLL
+    PUSHBUTTON      "C&lose", IDCANCEL, 96, 8, 40, 14, WS_TABSTOP
+    PUSHBUTTON      "&Update", IDOK, 96, 24, 40, 14, WS_TABSTOP
+END
+
+IDD_ABOUT DIALOG 8, 8, 224, 76
+CAPTION "About Quote"
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+FONT 8, "MS Sans Serif"
+BEGIN
+    CONTROL "", IDC_VERSION, "boxctrl", BOXS_INSIDE | BOXS_BOLD | BOXS_CENTER, 
+            8, 8, 160, 12
+
+    COMBOBOX IDC_TEMPLATE, 8, 24, 80, 112, 
+             CBS_DROPDOWNLIST | CBS_SORT | WS_VSCROLL | WS_TABSTOP
+
+    CONTROL "", IDC_A, "boxctrl", BOXS_INSIDE | BOXS_LEFT,
+             96, 24, 120, 12
+
+    CONTROL "", IDC_B, "boxctrl", BOXS_INSIDE | BOXS_LEFT,
+             96, 40, 120, 12 
+
+    CONTROL "", IDC_C, "boxctrl", BOXS_INSIDE | BOXS_LEFT,
+             96, 56, 120, 12 
+
+    PUSHBUTTON "C&lose", IDCANCEL, 176, 8, 40, 14
+END
+
+IDD_CREATE_IT DIALOG 8, 8, 168, 128
+STYLE DS_MODALFRAME | WS_POPUP | WS_VISIBLE | WS_CAPTION | WS_SYSMENU
+CAPTION "Create Indicator Template"
+FONT 8, "MS Sans Serif"
+BEGIN
+    LTEXT           "Name:", -1, 8, 8, 32, 8
+    COMBOBOX        IDC_TEMPLATE, 32, 8, 64, 112, CBS_DROPDOWN | CBS_AUTOHSCROLL | CBS_SORT |
+                    WS_VSCROLL | WS_TABSTOP
+    LTEXT           "Path:", -1, 8, 24, 32, 8
+    EDITTEXT        IDC_PATH, 40, 24, 56, 12, ES_AUTOHSCROLL
+    LTEXT           "Color:", -1, 8, 48, 20, 8
+    COMBOBOX        IDC_COLOR, 8, 56, 64, 112, CBS_DROPDOWNLIST | CBS_OWNERDRAWFIXED | 
+                    WS_VSCROLL | WS_TABSTOP
+
+    GROUPBOX        "Graph Type", 107, 104, 56, 56, 64
+
+    CONTROL         "Line", IDC_LINE,   "Button", BS_AUTORADIOBUTTON | WS_TABSTOP, 
+                    112, 72, 40, 10
+    CONTROL         "Bar", IDC_BAR,     "Button", BS_AUTORADIOBUTTON | WS_TABSTOP, 
+                    112, 88, 40, 10
+    CONTROL         "Point", IDC_POINT, "Button", BS_AUTORADIOBUTTON | WS_TABSTOP, 
+                    112, 104, 40, 10
+
+    PUSHBUTTON      "C&lose", IDCANCEL, 120, 8, 40, 14
+    PUSHBUTTON      "&Update", IDOK, 120, 24, 40, 14
+    PUSHBUTTON      "&Options...", IDC_OPTIONS, 120, 40, 40, 14
+END
+
+IDD_CREATE_COND DIALOG 8, 8, 168, 128
+STYLE DS_MODALFRAME | WS_POPUP | WS_VISIBLE | WS_CAPTION | WS_SYSMENU
+CAPTION "Create Condition"
+FONT 8, "MS Sans Serif"
+BEGIN
+    LTEXT           "Name:", -1, 8, 8, 32, 8
+    COMBOBOX        IDC_CONDITION, 32, 8, 64, 112, CBS_DROPDOWN | CBS_AUTOHSCROLL | CBS_SORT |
+                    WS_VSCROLL | WS_TABSTOP
+    
+    LTEXT           "Color:", -1, 8, 24, 20, 8
+    COMBOBOX        IDC_COLOR, 8, 32, 64, 112, CBS_DROPDOWNLIST | CBS_OWNERDRAWFIXED | 
+                    WS_VSCROLL | WS_TABSTOP
+    
+    LTEXT           "Definition:", -1, 8, 48, 88, 8
+    EDITTEXT        IDC_DEFN, 8, 56, 88, 56, ES_MULTILINE | ES_AUTOVSCROLL | 
+                    ES_AUTOHSCROLL | ES_WANTRETURN
+
+    PUSHBUTTON      "C&lose", IDCANCEL, 120, 8, 40, 14
+    PUSHBUTTON      "&Update", IDOK, 120, 24, 40, 14
+END
+
+IDD_DELETE_COND DIALOG 8, 8, 148, 56
+STYLE DS_MODALFRAME | WS_POPUP | WS_VISIBLE | WS_CAPTION | WS_SYSMENU
+CAPTION "Delete Condition"
+FONT 8, "MS Sans Serif"
+BEGIN
+    LTEXT           "Name:", -1, 4, 8, 36, 8
+    COMBOBOX        IDC_CONDITION, 32, 8, 64, 112, CBS_DROPDOWNLIST | CBS_SORT | 
+                    WS_VSCROLL | WS_TABSTOP
+    PUSHBUTTON      "C&lose", IDCANCEL, 104, 8, 40, 14, WS_TABSTOP
+    PUSHBUTTON      "&Delete", IDOK, 104, 24, 40, 14, WS_TABSTOP
+END
+
+IDD_CREATE_CONST DIALOG 8, 8, 168, 64
+STYLE DS_MODALFRAME | WS_POPUP | WS_VISIBLE | WS_CAPTION | WS_SYSMENU
+CAPTION "Create Constant"
+FONT 8, "MS Sans Serif"
+BEGIN
+    LTEXT           "Name:", -1, 8, 8, 32, 8
+    COMBOBOX        IDC_CONST, 8, 16, 80, 112, CBS_DROPDOWN | CBS_AUTOHSCROLL | CBS_SORT |
+                    WS_VSCROLL | WS_TABSTOP
+    
+    LTEXT           "Definition:", -1, 8, 32, 32, 8
+    EDITTEXT        IDC_DEFN, 8, 40, 80, 12, ES_AUTOHSCROLL | WS_TABSTOP
+
+    PUSHBUTTON      "C&lose", IDCANCEL, 120, 8, 40, 14
+    PUSHBUTTON      "&Update", IDOK, 120, 24, 40, 14
+END
+
+IDD_DELETE_CONST DIALOG 8, 8, 148, 56
+STYLE DS_MODALFRAME | WS_POPUP | WS_VISIBLE | WS_CAPTION | WS_SYSMENU
+CAPTION "Delete Constant"
+FONT 8, "MS Sans Serif"
+BEGIN
+    LTEXT           "Name:", -1, 4, 8, 36, 8
+    COMBOBOX        IDC_CONST, 32, 8, 64, 112, CBS_DROPDOWNLIST | CBS_SORT | 
+                    WS_VSCROLL | WS_TABSTOP
+    PUSHBUTTON      "C&lose", IDCANCEL, 104, 8, 40, 14, WS_TABSTOP
+    PUSHBUTTON      "&Delete", IDOK, 104, 24, 40, 14, WS_TABSTOP
+END
+
+IDD_EXTERNAL_IT DIALOG 8, 8, 168, 128
+STYLE DS_MODALFRAME | WS_POPUP | WS_VISIBLE | WS_CAPTION | WS_SYSMENU
+CAPTION "External Indicator Template"
+FONT 8, "MS Sans Serif"
+BEGIN
+    LTEXT           "Name:", -1, 8, 8, 32, 8
+    COMBOBOX        IDC_TEMPLATE, 32, 8, 64, 112, CBS_DROPDOWN | CBS_AUTOHSCROLL | CBS_SORT |
+                    WS_VSCROLL | WS_TABSTOP
+    
+    LTEXT           "Color:", -1, 8, 24, 20, 8
+    COMBOBOX        IDC_COLOR, 8, 32, 64, 112, CBS_DROPDOWNLIST | CBS_OWNERDRAWFIXED | 
+                    WS_VSCROLL | WS_TABSTOP
+    
+    LTEXT           "External Name:", -1, 8, 52, 88, 8
+    EDITTEXT        IDC_DEFN, 8, 60, 64, 12, ES_AUTOHSCROLL | WS_TABSTOP
+    
+    LTEXT           "Horz. Lines:", -1, 8, 96, 88, 8
+    EDITTEXT        IDC_HORZ, 8, 104, 88, 12, ES_AUTOHSCROLL | WS_TABSTOP
+
+    GROUPBOX        "Graph Type", 107, 104, 52, 56, 64
+    CONTROL         "Line",  IDC_LINE,  "Button", BS_AUTORADIOBUTTON | WS_TABSTOP, 
+                    112, 68, 40, 10
+    CONTROL         "Bar",   IDC_BAR,   "Button", BS_AUTORADIOBUTTON | WS_TABSTOP, 
+                    112, 84, 40, 10
+    CONTROL         "Point", IDC_POINT, "Button", BS_AUTORADIOBUTTON | WS_TABSTOP, 
+                    112, 100, 40, 10
+    
+    PUSHBUTTON      "C&lose", IDCANCEL, 120, 8, 40, 14
+    PUSHBUTTON      "&Update", IDOK, 120, 24, 40, 14
+END
+
+IDD_CUSTOM_IT DIALOG 8, 8, 168, 160
+STYLE DS_MODALFRAME | WS_POPUP | WS_VISIBLE | WS_CAPTION | WS_SYSMENU
+CAPTION "Custom Indicator Template"
+FONT 8, "MS Sans Serif"
+BEGIN
+    LTEXT           "Name:", -1, 8, 8, 32, 8
+    COMBOBOX        IDC_TEMPLATE, 32, 8, 64, 112, CBS_DROPDOWN | CBS_AUTOHSCROLL | CBS_SORT |
+                    WS_VSCROLL | WS_TABSTOP
+    
+    LTEXT           "Color:", -1, 8, 24, 20, 8
+    COMBOBOX        IDC_COLOR, 8, 32, 64, 112, CBS_DROPDOWNLIST | CBS_OWNERDRAWFIXED | 
+                    WS_VSCROLL | WS_TABSTOP
+    
+    LTEXT           "Definition:", -1, 8, 48, 88, 8
+    EDITTEXT        IDC_DEFN, 8, 56, 88, 56, ES_MULTILINE | ES_AUTOVSCROLL | 
+                    ES_AUTOHSCROLL | ES_WANTRETURN
+    
+    LTEXT           "Horz. Lines:", -1, 8, 116, 88, 8
+    EDITTEXT        IDC_HORZ, 8, 124, 88, 12, ES_AUTOHSCROLL | WS_TABSTOP
+
+    GROUPBOX        "Graph Type", 107, 104, 52, 56, 64
+    CONTROL         "Line",  IDC_LINE,  "Button", BS_AUTORADIOBUTTON | WS_TABSTOP, 
+                    112, 68, 40, 10
+    CONTROL         "Bar",   IDC_BAR,   "Button", BS_AUTORADIOBUTTON | WS_TABSTOP, 
+                    112, 84, 40, 10
+    CONTROL         "Point", IDC_POINT, "Button", BS_AUTORADIOBUTTON | WS_TABSTOP, 
+                    112, 100, 40, 10
+    
+    PUSHBUTTON      "C&lose", IDCANCEL, 120, 8, 40, 14
+    PUSHBUTTON      "&Update", IDOK, 120, 24, 40, 14
+END
+
+IDD_DELETE_IT DIALOG 8, 8, 148, 56
+STYLE DS_MODALFRAME | WS_POPUP | WS_VISIBLE | WS_CAPTION | WS_SYSMENU
+CAPTION "Delete Indicator Template"
+FONT 8, "MS Sans Serif"
+BEGIN
+    LTEXT           "Name:", -1, 4, 8, 36, 8
+    COMBOBOX        IDC_TEMPLATE, 32, 8, 64, 112, CBS_DROPDOWNLIST | CBS_SORT | 
+                    WS_VSCROLL | WS_TABSTOP
+    PUSHBUTTON      "C&lose", IDCANCEL, 104, 8, 40, 14, WS_TABSTOP
+    PUSHBUTTON      "&Delete", IDOK, 104, 24, 40, 14, WS_TABSTOP
+END
+
+IDD_CREATE_WL DIALOG 8, 8, 208, 232
+STYLE DS_MODALFRAME | WS_POPUP | WS_VISIBLE | WS_CAPTION | WS_SYSMENU
+CAPTION "Create Window Layout"
+FONT 8, "MS Sans Serif"
+BEGIN
+    LTEXT           "Name:", -1, 8, 8, 56, 8
+    COMBOBOX        IDC_LAYOUT, 64, 8, 64, 112, CBS_DROPDOWN | CBS_AUTOHSCROLL | CBS_SORT |
+                    WS_VSCROLL | WS_TABSTOP
+    LTEXT           "DX Increment:", -1, 8, 24, 56, 8
+    EDITTEXT        IDC_DXINCR, 72, 24, 56, 12, ES_AUTOHSCROLL
+    CONTROL         "Auto-open", IDC_AUTO_OPEN, "Button", 
+                    BS_AUTOCHECKBOX | WS_TABSTOP, 8, 40, 64, 10
+    GROUPBOX        "View", -1, 8, 56, 192, 172
+    CONTROL         "&A", IDC_A, "Button", BS_AUTORADIOBUTTON | WS_TABSTOP, 16, 72, 16, 10
+    CONTROL         "&B", IDC_B, "Button", BS_AUTORADIOBUTTON | WS_TABSTOP, 16, 88, 16, 10
+    CONTROL         "&C", IDC_C, "Button", BS_AUTORADIOBUTTON | WS_TABSTOP, 40, 72, 16, 10
+    CONTROL         "&D", IDC_D, "Button", BS_AUTORADIOBUTTON | WS_TABSTOP, 40, 88, 16, 10
+    LTEXT           "View Title:", -1, 72, 72, 40, 8
+    EDITTEXT        IDC_VIEW_TITLE, 112, 72, 80, 12, ES_AUTOHSCROLL
+    LTEXT           "Exclude:", -1, 16, 104, 64, 8
+    COMBOBOX        IDC_EXCLUDE, 16, 112, 72, 112, CBS_DROPDOWNLIST | CBS_SORT | 
+                    WS_VSCROLL | WS_TABSTOP
+    CONTROL         "Show Hi-Lo-Cl", IDC_SHOW_HLC, "Button", BS_AUTOCHECKBOX | 
+                    WS_TABSTOP, 24, 136, 64, 10
+    CONTROL         "Log Scaling", IDC_LOGSCALING, "Button", BS_AUTOCHECKBOX | 
+                    WS_TABSTOP, 24, 152, 64, 10
+    LTEXT           "Grids/Axis:", -1, 24, 168, 64, 8
+    EDITTEXT        IDC_GRIDSPERAXIS, 24, 176, 64, 12, ES_AUTOHSCROLL
+    LTEXT           "Attached Rule:", -1, 24, 192, 64, 8
+    COMBOBOX        IDC_RULE, 24, 200, 64, 112, CBS_DROPDOWNLIST | CBS_SORT |
+                    WS_VSCROLL | WS_TABSTOP
+    LTEXT           "Attached Cond:", -1, 128, 192, 64, 8
+    COMBOBOX        IDC_CONDITION, 128, 200, 64, 112, CBS_DROPDOWNLIST | CBS_SORT |
+                    WS_VSCROLL | WS_TABSTOP
+    PUSHBUTTON      "&>>", IDC_INCLUDE_PUSH, 96, 104, 16, 14
+    PUSHBUTTON      "&<<", IDC_EXCLUDE_PUSH, 96, 120, 16, 14
+    LTEXT           "Include:", -1, 120, 104, 56, 8
+    COMBOBOX        IDC_INCLUDE, 120, 112, 72, 112, CBS_DROPDOWNLIST | CBS_SORT | 
+                    WS_VSCROLL | WS_TABSTOP
+    CONTROL         "Horz. Gridlines", IDC_SHOW_HG, "Button", 
+                    BS_AUTOCHECKBOX | WS_TABSTOP, 128, 136, 64, 10
+    CONTROL         "Round Scaling", IDC_ROUNDSCALING, "Button", BS_AUTOCHECKBOX |
+                    WS_TABSTOP, 128, 152, 64, 10
+    LTEXT           "Real Estate:", -1, 128, 168, 64, 8
+    EDITTEXT        IDC_REALESTATE, 128, 176, 64, 12, ES_AUTOHSCROLL
+    PUSHBUTTON      "C&lose", IDCANCEL, 160, 8, 40, 14
+    PUSHBUTTON      "&Update", IDOK, 160, 24, 40, 14
+END
+
+IDD_DELETE_WL DIALOG 8, 8, 148, 56
+STYLE DS_MODALFRAME | WS_POPUP | WS_VISIBLE | WS_CAPTION | WS_SYSMENU
+CAPTION "Delete Window Layout"
+FONT 8, "MS Sans Serif"
+BEGIN
+    LTEXT           "Name:", -1, 4, 8, 36, 8
+    COMBOBOX        IDC_LAYOUT, 40, 8, 56, 112, CBS_DROPDOWNLIST | CBS_SORT | 
+                    WS_VSCROLL | WS_TABSTOP
+    PUSHBUTTON      "C&lose", IDCANCEL, 104, 8, 40, 14, WS_TABSTOP
+    PUSHBUTTON      "&Delete", IDOK, 104, 24, 40, 14, WS_TABSTOP
+END
+
+IDD_PRINT DIALOG 8, 8, 152, 108
+STYLE DS_MODALFRAME | WS_POPUP | WS_VISIBLE | WS_CAPTION | WS_SYSMENU
+CAPTION "Print"
+FONT 8, "MS Sans Serif"
+BEGIN
+    COMBOBOX        IDC_LAYOUT, 8, 8, 56, 112, CBS_DROPDOWNLIST | CBS_SORT | 
+                    WS_VSCROLL | WS_TABSTOP
+
+    LTEXT           "Top",            -1, 72,  8, 24,  8
+    EDITTEXT                     IDC_TOP, 72, 16, 24, 12, ES_AUTOHSCROLL
+    
+    LTEXT           "Left",           -1, 72, 32, 24,  8
+    EDITTEXT                    IDC_LEFT, 72, 40, 24, 12, ES_AUTOHSCROLL
+    
+    LTEXT           "Bottom",         -1, 72, 56, 24,  8
+    EDITTEXT                  IDC_BOTTOM, 72, 64, 24, 12, ES_AUTOHSCROLL
+    
+    LTEXT           "Right",          -1, 72, 80, 24,  8
+    EDITTEXT                   IDC_RIGHT, 72, 88, 24, 12, ES_AUTOHSCROLL
+
+    CONTROL         "Last page only", IDC_LASTPAGEONLY, "Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP, 8, 32, 60, 12
+                    
+    PUSHBUTTON      "C&lose",  IDCANCEL, 104,  8, 40, 14, WS_TABSTOP
+    PUSHBUTTON      "&Print",      IDOK, 104, 24, 40, 14, WS_TABSTOP
+END
+
+IDD_SAVE_SCAN_RESULTS DIALOG 8, 8, 176, 48
+STYLE DS_MODALFRAME | WS_POPUP | WS_VISIBLE | WS_CAPTION | WS_SYSMENU
+CAPTION "Save Results"
+FONT 8, "MS Sans Serif"
+BEGIN
+    LTEXT      "Path",         -1,   8, 12, 96,  8
+    EDITTEXT             IDC_PATH,   8, 20, 96, 12
+
+    PUSHBUTTON "C&lose", IDCANCEL, 120,  8, 40, 14
+    PUSHBUTTON "&Save",  IDOK,     120, 24, 40, 14
+END
+
+IDD_REPORT_INDICATORVALUE_RESULTS DIALOG 8, 8, 140, 50
+STYLE DS_MODALFRAME | WS_POPUP | WS_VISIBLE | WS_CAPTION | WS_SYSMENU
+CAPTION "Indicator Value Results"
+FONT 8, "MS Sans Serif"
+BEGIN
+    CTEXT      "Results go here", IDC_RESULTS, 20, 10, 100, 8
+    PUSHBUTTON "C&lose",          IDCANCEL,    80, 25, 40, 14
+END
+
+IDD_REPORT_SCAN_RESULTS DIALOG 8, 8, 140, 50
+STYLE DS_MODALFRAME | WS_POPUP | WS_VISIBLE | WS_CAPTION | WS_SYSMENU
+CAPTION "Chart Scanner Results"
+FONT 8, "MS Sans Serif"
+BEGIN
+    CTEXT "", IDC_RESULTS, 20, 10, 100, 8
+    
+    PUSHBUTTON "&Save...",     IDOK,  20, 25, 40, 14
+    PUSHBUTTON "C&lose",   IDCANCEL,  80, 25, 40, 14
+END
+
+IDD_REPORT_RESULTS DIALOG 8, 8, 240, 200
+STYLE DS_MODALFRAME | WS_POPUP | WS_VISIBLE | WS_CAPTION | WS_SYSMENU
+CAPTION "Performance Results"
+FONT 8, "MS Sans Serif"
+BEGIN
+    GROUPBOX   "Summary",        -1,   4,   4, 112, 80
+    GROUPBOX   "All Trades",     -1,   4,  88, 112, 80
+    GROUPBOX   "Winning Trades", -1, 124,   4, 112, 80
+    GROUPBOX   "Losing Trades",  -1, 124,  88, 112, 80
+
+    LTEXT      "GP:GL",          -1,  12,  24, 96, 8
+    LTEXT      "%Prof. Trades",  -1,  12,  36, 96, 8
+    LTEXT      "",       IDC_ANNUALTRADE, 12, 48, 96, 8
+    LTEXT      "",       IDC_RESULT,      12, 60, 96, 8
+                                                
+    LTEXT      "Trades",         -1,  12, 108, 96, 8
+    LTEXT      "Avg. Length",    -1,  12, 120, 96, 8
+    LTEXT      "Avg. Trade",     -1,  12, 132, 96, 8    
+
+    LTEXT      "Trades",         -1, 132,  24, 96, 8
+    LTEXT      "Avg. Length",    -1, 132,  36, 96, 8
+    LTEXT      "Avg. Trade",     -1, 132,  48, 96, 8    
+    LTEXT      "Largest Trade",  -1, 132,  60, 96, 8
+
+    LTEXT      "Trades",         -1, 132, 108, 96, 8
+    LTEXT      "Avg. Length",    -1, 132, 120, 96, 8
+    LTEXT      "Avg. Trade",     -1, 132, 132, 96, 8    
+    LTEXT      "Largest Trade",  -1, 132, 144, 96, 8
+
+    LTEXT      "", IDC_RATIOWINLOSS,            72,  24, 36, 8
+    LTEXT      "", IDC_PERCENTPROFITABLE,       72,  36, 36, 8
+    LTEXT      "", IDC_ANNUALTRADE2,            72,  48, 36, 8
+    LTEXT      "", IDC_RESULT2,                 72,  60, 36, 8
+
+    LTEXT      "", IDC_TRADES,                  72, 108, 36, 8
+    LTEXT      "", IDC_AVERAGEDAYS,             72, 120, 36, 8
+    LTEXT      "", IDC_AVERAGETRADE,            72, 132, 36, 8
+
+    LTEXT      "", IDC_TRADESWIN,              192,  24, 36, 8
+    LTEXT      "", IDC_AVERAGEDAYSWIN,         192,  36, 36, 8
+    LTEXT      "", IDC_AVERAGETRADEWIN,        192,  48, 36, 8
+    LTEXT      "", IDC_LARGESTWIN,             192,  60, 36, 8
+
+    LTEXT      "", IDC_TRADESLOSS,             192, 108, 36, 8
+    LTEXT      "", IDC_AVERAGEDAYSLOSS,        192, 120, 36, 8
+    LTEXT      "", IDC_AVERAGETRADELOSS,       192, 132, 36, 8
+    LTEXT      "", IDC_LARGESTLOSS,            192, 144, 36, 8
+
+    PUSHBUTTON "&Save...",     IDOK,  70, 176, 40, 14
+    PUSHBUTTON "C&lose",   IDCANCEL, 130, 176, 40, 14
+END  

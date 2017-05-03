@@ -1,0 +1,286 @@
+This testplan will test the qt_upd tool, version 2.00
+The following tests will be executed.
+
+
+1.  Ensure that qt_upd can update a history file
+    with a date at the very beginning.
+
+2.  Ensure that qt_upd can update a history file
+    with a date in the middle.
+
+3.  Ensure that qt_upd can update a history file
+    with a date at the very end.
+
+4.  Ensure that qt_upd will not update a history file
+    with the date the same as a pre-existing date.
+    Use a different volume, to be sure.
+
+5.  Ensure that qt_upd will not update a history file
+    if the history file's ticker symbol is not found
+    in the update file.
+
+6.  Ensure that qt_upd will map XYZ_A.TXT to XYZ.A
+    and update the history file properly with the ticker
+    symbol 'XYZ.A'.
+
+7.  Ensure that qt_upd will update multiple history files
+    in the format:
+
+    qt_upd <update-file> *.TXT
+
+8.  Ensure that qt_upd will update multiple history files
+    in the format:
+
+    qt_upd <update-file> <directory1>\*.TXT <directory2>\*.TXT
+
+9.  Ensure that qt_upd will recover from the history file
+    not being present gracefully.
+
+    Repeat this with read-only files.
+
+10. Ensure that qt_upd will recover from the update file
+    not being present gracefully.
+
+    Repeat this with read-only files.
+
+11. Ensure that if a non-fatal error occurs, qt_upd will
+    stop processing the current file, but will continue
+    to process subsequent files.
+
+12. Ensure that qt_upd will handle alternate format strings.
+    Make sure to cover all of the different symbols.
+
+13. Ensure that qt_upd will handle alternate delimit strings.
+
+14. Ensure that qt_upd handles the '\t' and '\b' characters
+    properly.
+
+15. Ensure that buffer limits are handled properly:
+        -update maximum line length
+        -history maximum line length
+        -token maximum size
+
+16. Ensure that CopyFile( ) works by testing various
+    boundary conditions.
+
+17. Ensure that it doesn't open the update file in
+    thinking that it is a history file.
+
+---------------------------------------------------
+
+qt_upd 1.2.05 functionality
+---------------------------
+
+1.  Ensure that you fix the CompareRecords function:
+    use noon rather than midnight.
+
+2.  Ensure that the following options work:
+    -h
+    -H
+    -?
+    -dYYMMDD
+    -q
+
+3.  Ensure that 3, 4, 5, 6 parameters work.  Also
+    test this with wildcard matching.
+
+4.  Ensure that if you enter -dYYMMDD, and also
+    that if $yr|$mn|$dy is defined, then it bombs.
+
+5.  Ensure that if you specify -q, it operates
+    quitely.
+
+6.  Ensure that if it detects a bad format, that
+    only affects one file, not every file.
+
+
+qt_upd 1.3.00 functionality
+---------------------------
+
+1.  Ensure that -f appends to a file.
+
+2.  Ensure that -w will over-write a date properly.
+
+3.  Ensure that if you don't provide -w, it will
+    not over-write the date.
+
+4.  Ensure that -rYYMMDD will only accept 6 characters.
+
+5.  Ensure that if -rYYMMDD is not found, a warning
+    message is displayed and the file remains intact.
+
+6.  Ensure that if -rYYMMDD is found, the file is modified.
+
+7.  Ensure that if the tempory file is read-only, then
+    the original file is not corrupt or something.
+
+8.  Ensure that if the history file is read-only, this
+    case is handled correctly.
+    normal case
+    -rYYMMDD case
+    -f       case
+    
+9.  Ensure that -rYYMMDD only updates the file once.
+
+10. Ensure that -rYYMMDD works for multiple files.
+
+11. Delete a date at the very beginning.
+
+12. Delete a date at the very end.
+
+13. Delete a date in the middle.
+
+14. Ensure that you can't run -f or -rYYMMDD if
+    a bad history format is defined.
+
+** Note - qt_upd is not year 2000 complient - search
+          for '1900' in CompareRecords/CompareHistoryRecords
+          routines.
+
+
+qt_upd 1.3.00a functionality
+----------------------------
+
+The following are the test cases for 1.3.00a - Hash
+Table Enhancements:
+
+1.  Ensure that ASSERT works for DEBUG builds, but
+    is compiled out for RELEASE build.
+
+2.  Do a diff, code inspection, etc.
+
+3.  Ensure that qt_upd is Y2000 compliant.
+
+4.  Walk through the following routines in Codeview:
+        -DestroyHashTable
+        -HashTicker
+        -AddEmptyHash
+        -FindHash
+        -PopulateHashTable
+
+5.  Ensure that OOM is handled.
+
+6.  Ensure that if symbol is not in the update file,
+    this case is handled.
+
+7.  Ensure that only files in 'user space' are populated
+    into the hash table.
+
+8.  Ensure that the user can't update the same file twice.
+
+9.  Add an interface to dump out the hash table.
+
+
+QT_UPD 1.4.02 Functionality - Test Cases
+========================================
+
+
+4-Digit Year Support
+--------------------
+
+1.  Ensure that you can update 'normal' with 2-digit
+    history files, 2-digit update files
+
+2.  Ensure that you can update 'normal' with 2-digit
+    history files, 4-digit update files
+
+3.  Ensure that you can update 'normal' with 4-digit
+    history files, 2-digit update files
+
+4.  Ensure that you can update 'normal' with 4-digit
+    history files, 4-digit update files
+
+5.  Ensure that you can update 'fast' with 2-digit
+    update files
+
+6.  ensure that you can update 'fast' with 4-digit
+    update files
+
+7.  Ensure that you can update with $yr being 2-digits
+    for both the history and update file
+
+8.  Ensure that you can update with $yr being 4-digits
+    for both the history and update file
+
+9.  For 2-digit history files:
+
+    .  Ensure you can split a stock with a 2-digit year
+    .  Ensure you can split a stock with a 4-digit year
+    .  Ensure you can delete a date with a 2-digit year
+    .  Ensure you can delete a date with a 4-digit year
+    .  Ensure you can update a stock with a supplied 2-digit year
+    .  Ensure you can update a stock with a supplied 4-digit year
+
+10.  For 4-digit history files:
+    
+     .  Ensure you can split a stock with a 2-digit year
+     .  Ensure you can split a stock with a 4-digit year
+     .  Ensure you can delete a date with a 2-digit year
+     .  Ensure you can delete a date with a 4-digit year
+     .  Ensure you can update a stock with a supplied 2-digit year
+     .  Ensure you can update a stock with a supplied 4-digit year
+
+11.  Ensure that the written history file is always 4-digits
+
+12.  Ensure that the written history file writes $yr as 4-digits
+
+13.  Ensure that a record over-written is written as 4-digits
+
+
+Stock Splits
+------------
+
+1.  Ensure that the stock split syntax is valid
+    .  Ensure that all fields must be present
+    .  Ensure that nothing can be '0', or some other
+       alpha-numeric set of characters
+    .  Ensure that you can't try to split and remove a file
+       at the same time
+
+2.  Ensure that the split works on the exact day
+
+3.  Ensure that a split works for something like year 2001,
+    which doesn't exist in a history file
+
+4.  Ensure that a split 'works' for something like year 1993,
+    which doesn't exist in a history file
+
+5.  Ensure that a split works for a single-entry history file
+
+6.  Ensure that a split works when the update date is provided
+
+7.  Ensure that a 3 for 2 split also works
+
+8.  Ensure that a 2 for 3 split also works
+
+9.  Ensure that you can split something like:
+    
+        ABX.TXT PDG.TXT AL.TXT
+
+10.  Ensure that you can split something like:
+
+         *.TXT *.ASC
+
+
+qt_upd 1.4.02a functionality
+----------------------------
+
+1.  Ensure you can convert a file to the new format
+
+2.  Ensure you can now convert it back
+
+3.  Ensure you can convert multiple files
+
+4.  Ensure you can update a file
+
+5.  Ensure you can split a file
+
+6.  Ensure you can delete a date from a file
+
+7.  Ensure that you don't need to have QT_NEWHISTORY set to
+    do the above test cases
+
+8.  Ensure that you do need QT_NEWHISTORY to do the conversion
+
+9.  Ensure that you can convert a file to the new format,
+    then update it in the new format

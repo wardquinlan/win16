@@ -1,0 +1,261 @@
+#include <windows.h>
+#include "id1.hxx"
+
+IDI_BUDGET   ICON budget.ico
+IDI_DOCUMENT ICON doc.ico
+
+IDM_MENUMAIN MENU
+BEGIN
+	POPUP    "&File"
+	BEGIN
+	MENUITEM "&New\tCtrl+N",             IDM_NEW
+	MENUITEM "&Open...\tCtrl+O",         IDM_OPEN
+	MENUITEM "&Save\tCtrl+S",            IDM_SAVE
+	MENUITEM "Save &As...\tCtrl+A",      IDM_SAVEAS
+	MENUITEM SEPARATOR
+	MENUITEM "E&xit",                    IDM_EXIT
+	END
+
+	POPUP    "&Accounts"
+	BEGIN
+	MENUITEM "&Create...\tCtrl+R",       IDM_CREATE
+	MENUITEM "&Transactions...\tCtrl+T", IDM_TRANSACTIONS
+	MENUITEM "&Delete...\tCtrl+D",       IDM_DELETE
+	MENUITEM "Trans&fer...\tCtrl+F",     IDM_XFER
+	MENUITEM SEPARATOR
+	MENUITEM "&Balance...\tCtrl+B",      IDM_BALANCE
+	MENUITEM "&Unbalance\tCtrl+U",       IDM_UNBALANCE
+	MENUITEM SEPARATOR
+	MENUITEM "&Macros...\tCtrl+M",       IDM_MACRO
+	END
+
+	POPUP    "&Window"
+	BEGIN
+	MENUITEM "&Cascade",                 IDM_CASCADE
+	MENUITEM "&Tile",                    IDM_TILE
+	MENUITEM "&Arrange Icons",           IDM_ARRANGE
+	MENUITEM SEPARATOR
+	MENUITEM "Ca&lculator\tCtrl+L",      IDM_CALCULATOR
+	MENUITEM SEPARATOR
+	MENUITEM "&New Window...\tCtrl+W",   IDM_NEWWINDOW
+	END
+
+#ifdef DEBUG
+	POPUP    "&Tracing"
+	BEGIN
+	MENUITEM "Off",                      IDM_TR_OFF
+	MENUITEM "Normal",                   IDM_TR_NORMAL
+	MENUITEM "Intense",                  IDM_TR_INTENSE
+	MENUITEM "Assert Valid",             IDM_TR_ASSERTVALID
+	MENUITEM "Walk Memory",              IDM_TR_WALKMEMORY
+	MENUITEM "Check Memory",             IDM_TR_CHECKMEMORY
+	MENUITEM "Memory Stats",             IDM_TR_MEMORYSTATS
+	END
+#endif
+
+	MENUITEM "A&bout",                       IDM_ABOUT
+END
+
+IDD_DELETEBOX DIALOG DISCARDABLE 8, 8, 168, 48
+CAPTION "Delete Transactions"
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+FONT 8, "MS Sans Serif"
+BEGIN
+	LTEXT           "Transaction Number", -1, 8, 8, 40, 20
+	EDITTEXT        IDC_SEQ,                 48, 8, 64, 12, ES_AUTOHSCROLL | WS_TABSTOP
+
+	PUSHBUTTON      "&Delete",    IDOK, 120,  8, 40, 12, WS_TABSTOP
+	PUSHBUTTON      "C&lose", IDCANCEL, 120, 24, 40, 12, WS_TABSTOP
+END
+
+IDD_BALANCEBOX DIALOG DISCARDABLE 8, 8, 168, 48
+CAPTION "Balance"
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+FONT 8, "MS Sans Serif"
+BEGIN
+	LTEXT           "Transaction Number", -1, 8, 8, 40, 20
+	EDITTEXT        IDC_SEQ,                 48, 8, 64, 12, ES_AUTOHSCROLL | WS_TABSTOP
+
+	PUSHBUTTON      "&Balance",   IDOK, 120,  8, 40, 12, WS_TABSTOP
+	PUSHBUTTON      "C&lose", IDCANCEL, 120, 24, 40, 12, WS_TABSTOP
+END
+
+IDD_TRANSACTIONSBOX DIALOG DISCARDABLE 8, 8, 184, 80
+CAPTION "Edit Transactions"
+STYLE WS_POPUP | WS_CAPTION | WS_SYSMENU | WS_VISIBLE
+FONT 8, "MS Sans Serif"
+BEGIN
+	LTEXT           "Account", -1, 16,  8, 40, 12
+	COMBOBOX        IDC_ACCOUNT, 64, 8, 64, 112, CBS_SORT|CBS_DROPDOWNLIST|WS_VSCROLL|WS_TABSTOP
+
+	LTEXT           "Date (mm/dd/yy)", -1, 16, 24, 40, 20
+	EDITTEXT        IDC_DATE,              64, 24, 64, 12, ES_AUTOHSCROLL | WS_TABSTOP
+
+	LTEXT           "Amount", -1, 16, 48, 40, 12
+	EDITTEXT        IDC_AMOUNT,   64, 48, 64, 12, ES_AUTOHSCROLL | WS_TABSTOP
+
+	LTEXT           "Description", -1, 16, 64, 40, 12
+	EDITTEXT        IDC_DESC,          64, 64, 64, 12, ES_AUTOHSCROLL | WS_TABSTOP
+
+	PUSHBUTTON      "&Deposit",   IDC_DEPOSIT, 136, 8,  40, 12, WS_TABSTOP
+	PUSHBUTTON      "&Withdraw", IDC_WITHDRAW, 136, 24, 40, 12, WS_TABSTOP
+	PUSHBUTTON      "C&lose",        IDCANCEL, 136, 40, 40, 12, WS_TABSTOP
+END
+
+IDD_NEWWINDOWBOX DIALOG DISCARDABLE 8, 8, 160, 64
+CAPTION "New Window"
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+FONT 8, "MS Sans Serif"
+BEGIN
+	LTEXT           "Account", -1, 8, 8, 24, 12
+	COMBOBOX        IDC_ACCOUNT, 40, 8, 64, 112, CBS_SORT|CBS_DROPDOWNLIST|WS_VSCROLL|WS_TABSTOP
+
+	PUSHBUTTON      "&Account", IDC_ACCOUNT2, 112,  8, 40, 12, WS_TABSTOP
+	PUSHBUTTON      "&Summary", IDC_SUMMARY,  112, 24, 40, 12, WS_TABSTOP
+	PUSHBUTTON      "C&lose",   IDCANCEL,     112, 40, 40, 12, WS_TABSTOP
+END
+
+IDD_CREATEBOX DIALOG DISCARDABLE 8, 8, 160, 64
+CAPTION "Create Account"
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+FONT 8, "MS Sans Serif"
+BEGIN
+	LTEXT           "Account", -1, 8, 8, 24, 12
+	EDITTEXT        IDC_ACCOUNT,  48, 8, 48, 12, ES_AUTOHSCROLL | WS_TABSTOP
+
+	LTEXT           "Date (mm/dd/yy)", -1,  8, 24, 40, 20
+	EDITTEXT        IDC_DATE,              48, 24, 48, 12, ES_AUTOHSCROLL | WS_TABSTOP
+
+	LTEXT           "Initial Balance", -1, 8, 40, 32, 16
+	EDITTEXT        IDC_AMOUNT,           48, 40, 48, 12, ES_AUTOHSCROLL | WS_TABSTOP
+
+	PUSHBUTTON      "C&reate",    IDOK, 112, 8,  40, 12, WS_TABSTOP
+	PUSHBUTTON      "C&lose", IDCANCEL, 112, 24, 40, 12, WS_TABSTOP
+END
+
+IDD_MACROBOX DIALOG DISCARDABLE 8, 8, 160, 64
+CAPTION "Macro Execution"
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+FONT 8, "MS Sans Serif"
+BEGIN
+	LTEXT           "Macro", -1, 8, 8, 40, 12
+	COMBOBOX        IDC_MACRO,  48, 8, 48, 56, CBS_SORT|CBS_DROPDOWNLIST|WS_VSCROLL|WS_TABSTOP
+
+	LTEXT           "Date (mm/dd/yy)", -1,  8, 24, 40, 20
+	EDITTEXT        IDC_DATE,              48, 24, 48, 12, ES_AUTOHSCROLL | WS_TABSTOP
+
+	LTEXT           "Description", -1, 8, 44, 40, 16
+	EDITTEXT        IDC_DESC,         48, 44, 48, 12, ES_AUTOHSCROLL | WS_TABSTOP
+
+	PUSHBUTTON      "E&xecute",   IDOK, 112, 8,  40, 12, WS_TABSTOP
+	PUSHBUTTON      "C&lose", IDCANCEL, 112, 24, 40, 12, WS_TABSTOP
+END
+
+IDD_XFERBOX DIALOG DISCARDABLE 8, 8, 184, 96
+CAPTION "Transfer"
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+FONT 8, "MS Sans Serif"
+BEGIN
+	LTEXT           "Date (mm/dd/yy)", -1, 16,  8, 40, 20
+	EDITTEXT        IDC_DATE,              64,  8, 64, 12, ES_AUTOHSCROLL | WS_TABSTOP
+	
+	LTEXT           "From...", -1,         16, 24, 40, 12
+	COMBOBOX        IDC_FROM,              64, 24, 64, 112, CBS_SORT|CBS_DROPDOWNLIST|WS_VSCROLL|WS_TABSTOP
+
+	LTEXT           "To...", -1,           16, 40, 40, 12
+	COMBOBOX        IDC_TO,                64, 40, 64, 112, CBS_SORT|CBS_DROPDOWNLIST|WS_VSCROLL|WS_TABSTOP
+
+	LTEXT           "Amount", -1,          16, 56, 40, 12
+	EDITTEXT        IDC_AMOUNT,            64, 56, 64, 12, ES_AUTOHSCROLL | WS_TABSTOP
+
+	LTEXT           "Description", -1,     16, 72, 40, 12
+	EDITTEXT        IDC_DESC,              64, 72, 64, 12, ES_AUTOHSCROLL | WS_TABSTOP
+
+	PUSHBUTTON      "&Transfer",  IDOK, 136,  8, 40, 12, WS_TABSTOP
+	PUSHBUTTON      "C&lose", IDCANCEL, 136, 24, 40, 12, WS_TABSTOP
+END
+
+IDD_ABOUTBOX DIALOG DISCARDABLE 8, 8, 160, 48
+CAPTION "About Budget"
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+FONT 8, "MS Sans Serif"
+BEGIN
+#ifdef DEBUG
+	CONTROL         "", IDC_VERSION1, "boxctrl", 0, 0,  0, 160, 16
+	CONTROL         "", IDC_VERSION2, "boxctrl", 0, 0, 16, 160, 16
+	CONTROL         "Copyright (c) Ward Quinlan, 1995, 1996", 0, 
+			"boxctrl", 0, 0, 32, 160, 16
+#else
+	CONTROL         "", IDC_VERSION1, "boxctrl", 0, 0,  0, 160, 24
+	CONTROL         "Copyright (c) Ward Quinlan, 1995, 1996", 0, 
+			"boxctrl", 0, 0, 24, 160, 24
+#endif
+END
+
+IDD_CONFIRMBOX DIALOG DISCARDABLE 8, 8, 184, 80
+CAPTION "Confirmation"
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+FONT 8, "MS Sans Serif"
+BEGIN
+	LTEXT "",                    IDC_CONFIRMTEXT,  8,  8, 120, 24
+	LTEXT "Transaction Number:",              -1,  8, 40,  80,  8
+	LTEXT "",                            IDC_SEQ, 88, 40,  40,  8
+	LTEXT "Date:",                            -1,  8, 48,  80,  8
+	LTEXT "",                           IDC_DATE, 88, 48,  40,  8
+	LTEXT "",                    IDC_DEPOSITTEXT,  8, 56,  80,  8
+	LTEXT "",                        IDC_DEPOSIT, 88, 56,  40,  8
+	LTEXT "",                    IDC_BALANCETEXT,  8, 64,  80,  8
+	LTEXT "",                        IDC_BALANCE, 88, 64,  40,  8
+
+	PUSHBUTTON      "OK",         IDOK, 136, 8,  40, 12, WS_TABSTOP
+	PUSHBUTTON      "Cancel", IDCANCEL, 136, 24, 40, 12, WS_TABSTOP
+END
+
+new      BITMAP new.bmp   
+new2     BITMAP new2.bmp
+open     BITMAP open.bmp
+open2    BITMAP open2.bmp
+save     BITMAP save.bmp
+save2    BITMAP save2.bmp
+x        BITMAP x.bmp
+x2       BITMAP x2.bmp
+account  BITMAP account.bmp
+account2 BITMAP account2.bmp
+pen      BITMAP pen.bmp
+pen2     BITMAP pen2.bmp
+tile     BITMAP tile.bmp
+tile2    BITMAP tile2.bmp
+calc     BITMAP calc.bmp
+calc2    BITMAP calc2.bmp
+wind     BITMAP wind.bmp
+wind2    BITMAP wind2.bmp
+xfer     BITMAP xfer.bmp
+xfer2    BITMAP xfer2.bmp
+m        BITMAP m.bmp
+m2       BITMAP m2.bmp
+erase    BITMAP erase.bmp
+erase2   BITMAP erase2.bmp
+blank    BITMAP blank.bmp
+blank2   BITMAP blank2.bmp
+
+/* standard accelerators: */
+/* Ctrl+Z - Undo          */
+/* Ctrl+X - Cut           */
+/* Ctrl+C - Copy          */
+/* Ctrl+V - Paste         */
+IDA_BUDGET ACCELERATORS
+	{
+	"N", IDM_NEW,          CONTROL, VIRTKEY
+	"O", IDM_OPEN,         CONTROL, VIRTKEY
+	"S", IDM_SAVE,         CONTROL, VIRTKEY
+	"A", IDM_SAVEAS,       CONTROL, VIRTKEY
+	"R", IDM_CREATE,       CONTROL, VIRTKEY
+	"T", IDM_TRANSACTIONS, CONTROL, VIRTKEY
+	"D", IDM_DELETE,       CONTROL, VIRTKEY
+	"W", IDM_NEWWINDOW,    CONTROL, VIRTKEY
+	"F", IDM_XFER,         CONTROL, VIRTKEY
+	"B", IDM_BALANCE,      CONTROL, VIRTKEY
+	"U", IDM_UNBALANCE,    CONTROL, VIRTKEY
+	"M", IDM_MACRO,        CONTROL, VIRTKEY
+	"L", IDM_CALCULATOR,   CONTROL, VIRTKEY
+	}

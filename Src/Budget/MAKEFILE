@@ -1,0 +1,148 @@
+#############################################################################
+# Budget Makefile                                                           #
+#                                                                           #
+# Options:                                                                  #
+#                                                                           #
+# DEBUG=Y Compiles a DEBUG Version                                          #
+# TEST=Y  Compiles a version which tests the QObject library                #
+#                                                                           #
+#############################################################################
+
+!ifdef TEST
+!ifndef DEBUG
+!error You must define DEBUG to compile with TEST defined.
+!endif
+!endif
+
+!ifndef MODEL
+MODEL    = L
+!endif
+
+!if ( "$(MODEL)" != "S" ) && ( "$(MODEL)" != "M" ) && ( "$(MODEL)" != "L" )
+!error Model must be one of S, M, L
+!endif
+
+!if ( "$(MODEL)" == "S" )
+FCODE    = 0
+FDATA    = 0
+!endif
+
+!if ( "$(MODEL)" == "M" )
+FCODE    = 1
+FDATA    = 0
+!endif
+
+!if ( "$(MODEL)" == "L" )
+FCODE    = 1
+FDATA    = 1
+!endif
+
+STDINC   = budget.hxx qobject.pch id1.hxx
+
+PROGNAME = budget
+CC       = cl
+LINK     = link
+RC       = rc
+	 
+CFLAGS   = -c -G2sw -Zp1 -W3 -A$(MODEL) -nologo -Yuqobject.hxx
+CDEFS    = -DFCODE=$(FCODE) -DFDATA=$(FDATA)
+LFLAGS   = /STACK:10240 /ALIGN:16 /NOD /ONERROR:NOEXE /PACKC:61440
+RCFLAGS  = 
+LIBS     = $(MODEL)LIBCEW LIBW COMMDLG
+
+QOBJECT  = $(MODEL)QOBJ
+
+!ifdef DEBUG
+CFLAGS   = $(CFLAGS) -Od -Z7 -Yd
+CDEFS    = $(CDEFS) -DDEBUG=1
+LFLAGS   = $(LFLAGS) /CODEVIEW
+RCFLAGS  = $(RCFLAGS) -DDEBUG
+QOBJECT  = $(QOBJECT)D
+!endif
+
+!ifdef TEST
+CDEFS    = $(CDEFS) -DTEST=1
+!endif
+
+LIBS     = $(QOBJECT) $(LIBS)
+OBJS     = scrview.obj budget.obj dlg.obj doc.obj view.obj profile.obj boxctrl.obj
+
+#############################################################################
+# Inference Rules                                                           #
+#############################################################################
+
+.SUFFIXES: .cpp
+
+.cpp.obj:
+	$(CC) $(CFLAGS) $(CDEFS) $*.cpp
+
+#############################################################################
+# Executable Section                                                        #
+#############################################################################
+
+install: $(DEVELOPMENT)\BIN\$(PROGNAME).exe
+
+$(DEVELOPMENT)\BIN\$(PROGNAME).exe: $(PROGNAME).exe
+	-copy $(PROGNAME).exe $(DEVELOPMENT)\BIN
+
+#############################################################################
+# Linking Section                                                           #
+#############################################################################
+
+$(PROGNAME).exe: $(OBJS) $(PROGNAME).def $(PROGNAME).res $(DEVELOPMENT)\LIB\$(QOBJECT).LIB
+	$(LINK) @<<
+$(OBJS)
+$(PROGNAME).exe
+$(PROGNAME).map
+$(LIBS)
+$(PROGNAME).def $(LFLAGS)
+;
+<<
+	rc -t $(PROGNAME).res
+
+#############################################################################
+# Resources Section                                                         #
+#############################################################################
+
+$(PROGNAME).res: $(PROGNAME).rc 
+	rc -r -z $(RCFLAGS) $(PROGNAME).rc
+
+$(PROGNAME).rc:  id1.hxx
+
+#############################################################################
+# Include File Dependencies                                                 #
+#############################################################################
+
+qobject.pch: $(DEVELOPMENT)\INC\qobject.hxx
+	$(CC) $(CFLAGS) $(CDEFS) /Ycqobject.hxx stdwin.cpp
+
+*.cpp: $(STDINC) $*.hxx
+
+## More specialized dependancies
+budget.hxx: doc.hxx
+budget.cpp: dlg.hxx view.hxx profile.hxx
+view.cpp:   profile.hxx
+doc.cpp:    otdoc.hxx
+
+#Note: you must use decimal here !!
+id1.hxx: $(PROGNAME).r
+	led -p -q -l100 < $(PROGNAME).r > id1.hxx "#define $$0 $$line"
+
+otdoc.hxx: otdoc.r
+	led -p -q -l0 < otdoc.r > otdoc.hxx "#define $$0 ( otUser + $$line )"
+
+clean:
+	-erase $(PROGNAME).exe
+	-erase $(PROGNAME).res
+	-erase qobject.pch
+	-erase $(PROGNAME).map
+	-erase *.obj     
+	-erase id?.hxx
+	-erase *.vcw
+	-erase *.wsp
+	-erase otdoc.hxx
+	
+clninst:
+	-erase $(DEVELOPMENT)\BIN\$(PROGNAME).exe
+
+#############################################################################

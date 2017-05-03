@@ -1,0 +1,90 @@
+#############################################################################
+# Indicator Makefile (CPP)                                                  #
+#                                                                           #
+# Options:                                                                  #
+#                                                                           #
+# DEBUG=Y Compiles a DEBUG Version                                          #
+#                                                                           #
+#############################################################################
+
+!ifndef MODEL
+MODEL    = M
+!endif
+
+CC       = cl
+CFLAGS   = -c -A$(MODEL)w -G2sw -Zp -W3 -nologo
+CDEFS    =
+
+LINK     = link
+LFLAGS   = /NOD /NOE
+LDEFS    = 
+
+RC       = rc
+
+!ifdef DEBUG
+CFLAGS   = $(CFLAGS) -Od -Z7 -Yd
+CDEFS    = $(CDEFS) -DDEBUG=1
+LFLAGS   = $(LFLAGS) /CO /LI /MAP
+RC       = $(RC) -DDEBUG
+!endif
+
+LIBS     = $(MODEL)DLLCEW LIBW STATPAK
+DLL      = CCI.DLL DMI.DLL
+
+#############################################################################
+# Inference Rules                                                           #
+#############################################################################
+
+.SUFFIXES: .CPP .RC
+
+.CPP.OBJ:
+    $(CC) $(CFLAGS) $(CDEFS) $*.CPP
+
+#############################################################################
+# Executable Section                                                        #
+#############################################################################
+
+install: $(DLL)
+    -copy CCI.DLL $(DEVELOPMENT)\BIN\CCI.IND
+    -copy DMI.DLL $(DEVELOPMENT)\BIN\DMI.IND
+    
+#############################################################################
+# Linking Section                                                           #
+#############################################################################
+
+$(DLL): $*.OBJ $*.DEF $*.RES
+    $(LINK) @<<
+    $*.OBJ
+    $*.DLL
+    $*.MAP
+    $(LIBS)
+    $*.DEF $(LFLAGS) $(LDEFS)
+<<
+    $(RC) $*.RES $*.DLL
+
+#############################################################################
+# Resources Section                                                         #
+#############################################################################
+
+.RC.RES:
+    $(RC) -r $*.RC
+
+#############################################################################
+# Include File Dependencies                                                 #
+#############################################################################
+
+*.C: $*.H resource.hxx
+
+*.CPP: $*.HXX resource.hxx
+
+clninst:
+    -erase $(DEVELOPMENT)\BIN\CCI.IND
+    -erase $(DEVELOPMENT)\BIN\DMI.IND
+    
+clean:
+    -erase *.DLL
+    -erase *.MAP
+    -erase *.OBJ
+    -erase *.RES
+
+#############################################################################

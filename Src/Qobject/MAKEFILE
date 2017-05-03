@@ -1,0 +1,94 @@
+#############################################################################
+# qobject Makefile                                                          #
+#                                                                           #
+# Options:                                                                  #
+#                                                                           #
+# DEBUG=Y Compiles a DEBUG Version                                          #
+#                                                                           #
+#############################################################################
+
+!ifndef MODEL
+MODEL    = L
+!endif
+
+!if ( "$(MODEL)" != "S" ) && ( "$(MODEL)" != "M" ) && ( "$(MODEL)" != "L" )
+!error Model must be one of S, M, L
+!endif
+
+!if ( "$(MODEL)" == "S" )
+FCODE    = 0
+FDATA    = 0
+!endif
+
+!if ( "$(MODEL)" == "M" )
+FCODE    = 1
+FDATA    = 0
+!endif
+
+!if ( "$(MODEL)" == "L" )
+FCODE    = 1
+FDATA    = 1
+!endif
+
+CC       = cl
+CFLAGS   = -c -G2sw -Zp1 -W3 -nologo -Yuqobject.hxx -A$(MODEL) 
+CDEFS    = -DFCODE=$(FCODE) -DFDATA=$(FDATA)
+OBJS     = qstring.obj qtime.obj qobject.obj qarchive.obj
+
+LIBNAME  = $(MODEL)QOBJ
+
+!ifdef DEBUG
+CFLAGS   = $(CFLAGS) -Od -Z7 -Yd
+CDEFS    = $(CDEFS) -DDEBUG=1
+OBJS     = $(OBJS) qtrace.obj qmem.obj qtest.obj
+LIBNAME  = $(LIBNAME)D
+!endif
+
+#############################################################################
+# Inference Rules                                                           #
+#############################################################################
+
+.SUFFIXES: .cpp
+
+.cpp.obj:
+    $(CC) $(CFLAGS) $(CDEFS) $*.cpp
+
+#############################################################################
+# Library Section                                                           #
+#############################################################################
+
+install: $(LIBNAME).LIB
+    -copy $(LIBNAME).LIB $(DEVELOPMENT)\LIB
+    -copy QOBJECT.HXX    $(DEVELOPMENT)\INC
+    -copy OT.HXX         $(DEVELOPMENT)\INC
+
+$(LIBNAME).LIB: $(OBJS)
+    -erase $(LIBNAME).LIB
+    lib $(LIBNAME).LIB $(OBJS), $(LIBNAME).LST
+
+#############################################################################
+# Include File Dependencies                                                 #
+#############################################################################
+
+qobject.pch: qobject.hxx
+    $(CC) $(CFLAGS) $(CDEFS) -Ycqobject.hxx stdwin.cpp
+
+*.cpp: qobject.pch
+
+qobject.hxx: ot.hxx
+
+ot.hxx: ot.r
+    led -p -q -l0 < ot.r > ot.hxx "#define $$0 ( otQObject + $$line )"
+
+clean:
+    -erase *.lib
+    -erase qobject.pch
+    -erase *.obj     
+    -erase *.lst
+    -erase ot.hxx
+    
+clninst:
+    -erase $(DEVELOPMENT)\LIB\$(LIBNAME).LIB
+    -erase $(DEVELOPMENT)\INC\QOBJECT.HXX
+    -erase $(DEVELOPMENT)\INC\OT.HXX
+#############################################################################
