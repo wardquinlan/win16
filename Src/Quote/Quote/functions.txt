@@ -1,0 +1,44 @@
+Standard functions
+------------------
+
+@avg() - Arithmetic Average
+@xavg() - Exponential Average
+@lwst() - Lowest
+@hgst() - Highest
+@min() - Minimum
+@max() - Maximum
+@rsi() - Relative Strength Index
+@vi() - Volatility Index
+@sar() - Stop And Reverse
+@std() - Standard Deviation
+@aroc() - Arithmetic Rate of Change
+@groc() - Geometric Rate of Chagne
+@nmin() - New Minimum
+@nmax() - New Maximum
+@shft() - Shift Operator
+@lrg() - Linear Regression
+@corr() - Correlation Coefficient
+@abs() - Absolute Value
+@pow() - Power
+@log() - Logarithm
+@exp() - Exponential
+@pts() - Points
+@offs() - Offset
+@year() - Year
+@mth() - Month
+@mday() - Month Day
+@wday() - Week Day
+@yday() - Year Day
+
+
+Scalar Functions
+----------------
+
+@mms() - Money Management Stop
+
+@trs() - Trailing Stop
+
+@bsi() - Bars Since Entry
+
+@etp() - Entry Price
+
